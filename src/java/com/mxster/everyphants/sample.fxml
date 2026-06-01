@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.mxster.everyphants.FxmlController" spacing="10" alignment="CENTER"
+    prefWidth="300" prefHeight="200">
+    <Label fx:id="label" text="Click the button" />
+    <Button fx:id="button" text="Click me" onAction="#onClick" />
+</VBox>
