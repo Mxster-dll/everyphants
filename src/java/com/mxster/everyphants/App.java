@@ -13,6 +13,7 @@ public class App extends Application {
         stage.setTitle("FXML Demo");
         stage.setScene(new Scene(root));
         stage.show();
+        // f
     }
 
     public static void main(String[] args) {
