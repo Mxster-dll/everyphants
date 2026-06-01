@@ -7,15 +7,17 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class App extends Application {
+
     @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        stage.setTitle("FXML Demo");
-        stage.setScene(new Scene(root));
-        stage.show();
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        primaryStage.setTitle("万象 Everyphants");
+        primaryStage.setScene(new Scene(root, 400, 200));
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+
 }
