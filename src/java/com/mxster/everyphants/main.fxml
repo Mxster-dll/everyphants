@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.mxster.everyphants.MainController"
-      alignment="CENTER"
-      spacing="10"
-      prefHeight="200.0"
-      prefWidth="400.0">
-    <TextField fx:id="inputField" promptText="请输入内容..." />
-</VBox>
+<StackPane xmlns="http://javafx.com/javafx/19"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.mxster.everyphants.FxmlController"
+           fx:id="rootPane"
+           styleClass="root-pane">
+
+    <TextField fx:id="inputField"
+               styleClass="input-field"
+               promptText="输入内容…" />
+</StackPane>
