@@ -1,12 +1,14 @@
-/* ── 根容器：毛玻璃底色 + 边框（圆角/阴影由 Win32 DWM 原生处理）── */
+/* ── 暗色主题：主题色 #1e1e1e ── */
+
+/* 根容器：深色半透明底 + 微光边框（毛玻璃圆角/阴影由 Win32 DWM 原生处理） */
 .root-pane {
-    -fx-background-color: rgba(66, 66, 66, 0.25);
-    -fx-border-color: rgba(255, 255, 255, 0.20);
+    -fx-background-color: rgba(0, 0, 0, 0.6);
+    -fx-border-color: rgba(255, 255, 255, 0.10);
     -fx-border-width: 1;
     -fx-padding: 14;
 }
 
-/* ── 输入框（透明、无边框、无圆角、无阴影） ── */
+/* 输入框：透明、无边框、无圆角、无阴影 */
 .input-field {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
@@ -17,11 +19,11 @@
     -fx-font-family: "Microsoft YaHei";
     -fx-padding: 8 12;
     -fx-pref-width: 320;
-    -fx-text-fill: #1e1e1e;
-    -fx-prompt-text-fill: rgba(128, 128, 128, 0.6);
+    -fx-text-fill: #e8e8e8;
+    -fx-prompt-text-fill: rgba(200, 200, 200, 0.35);
 }
 
-/* 去掉聚焦时的样式 */
+/* 聚焦时无额外样式 */
 .input-field:focused {
     -fx-border-color: transparent;
     -fx-background-color: transparent;

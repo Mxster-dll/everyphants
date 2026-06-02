@@ -23,7 +23,7 @@ public class App extends Application {
         stage.setTitle("万象");
 
         // ── 加载 FXML ──
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("App.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
         Parent root = loader.load();
 
         // ── 注入 Stage 给控制器 ──
