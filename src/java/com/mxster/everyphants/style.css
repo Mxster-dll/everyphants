@@ -1,14 +1,86 @@
-/* ── 暗色主题：主题色 #1e1e1e ── */
+/* ═══════════════════════════════════════════════════════════════
+   万象 · 暗色主题覆盖（基于 javafx-fluent-theme）
+   主题色 #1e1e1e  →  覆盖 fluent-light.css 的亮色变量
+   ═══════════════════════════════════════════════════════════════ */
 
-/* 根容器：深色半透明底 + 微光边框（毛玻璃圆角/阴影由 Win32 DWM 原生处理） */
+.root {
+    /* ── 文字颜色（暗底 → 亮字）── */
+    -TextFillColorPrimaryBrush: #e8e8e8;
+    -TextFillColorSecondaryBrush: #a0a0a0;
+    -TextFillColorTertiaryBrush: #707070;
+    -TextFillColorDisabledBrush: #5a5a5a;
+
+    /* ── 强调文字（保持蓝色系）── */
+    -AccentTextFillColorPrimaryBrush: #99c9ff;
+    -AccentTextFillColorSecondaryBrush: #60cdff;
+    -AccentTextFillColorTertiaryBrush: #60cdff;
+    -AccentTextFillColorDisabledBrush: #5a5a5a;
+
+    /* ── 控件填充（暗底）── */
+    -TextOnAccentFillColorSelectedTextBrush: #1e1e1e;
+    -TextOnAccentFillColorSecondaryBrush: #e8e8e8;
+    -TextOnAccentFillColorDisabledBrush: #5a5a5a;
+
+    -ControlFillColorDefaultBrush: rgba(30, 30, 30, 0.55);
+    -ControlFillColorSecondaryBrush: rgba(40, 40, 40, 0.50);
+    -ControlFillColorTertiaryBrush: rgba(35, 35, 35, 0.45);
+    -ControlFillColorQuarternaryBrush: rgba(35, 35, 35, 0.40);
+    -ControlFillColorDisabledBrush: rgba(45, 45, 45, 0.30);
+    -ControlFillColorTransparentBrush: transparent;
+    -ControlFillColorInputActiveBrush: rgba(30, 30, 30, 0.40);
+
+    -SubtleFillColorTransparentBrush: transparent;
+    -SubtleFillColorSecondaryBrush: rgba(60, 60, 60, 0.30);
+    -SubtleFillColorTertiaryBrush: rgba(50, 50, 50, 0.25);
+    -SubtleFillColorDisabledBrush: transparent;
+
+    -AccentFillColorDefaultBrush: #60cdff;
+    -AccentFillColorSecondaryBrush: #4db8e8;
+    -AccentFillColorTertiaryBrush: #3a9fd1;
+    -AccentFillColorDisabledBrush: #3a3a3a;
+    -AccentFillColorSelectedTextBackgroundBrush: #60cdff;
+
+    /* ── 边框 / 描边（暗底 → 微光边）── */
+    -ControlElevationBorderBrush: rgba(255, 255, 255, 0.08);
+    -CircleElevationBorderBrush: rgba(255, 255, 255, 0.06);
+    -TextControlElevationBorderBrush: rgba(255, 255, 255, 0.08);
+    -TextControlElevationBorderFocusedBrush: #60cdff;
+    -AccentControlElevationBorderBrush: rgba(255, 255, 255, 0.04);
+    -ControlStrongStrokeColorDefaultBrush: rgba(255, 255, 255, 0.15);
+    -ControlStrongStrokeColorDisabledBrush: rgba(255, 255, 255, 0.05);
+
+    /* ── 聚焦环 ── */
+    -FocusStrokeColorOuterBrush: #e8e8e8;
+    -FocusStrokeColorInnerBrush: #1e1e1e;
+
+    /* ── 系统色（成功/警告/错误 保持原意）── */
+    -SystemFillColorSuccessBrush: #6ccb6c;
+    -SystemFillColorSuccessBackgroundBrush: rgba(15, 123, 15, 0.20);
+    -SystemFillColorCautionBrush: #f0c050;
+    -SystemFillColorCautionBackgroundBrush: rgba(157, 93, 0, 0.20);
+    -SystemFillColorCriticalBrush: #e06050;
+    -SystemFillColorCriticalBackgroundBrush: rgba(196, 43, 28, 0.20);
+    -SystemFillColorAttentionBrush: #60cdff;
+    -SystemFillColorAttentionBackgroundBrush: rgba(0, 120, 212, 0.20);
+    -SystemFillColorNeutralBrush: #a0a0a0;
+    -SystemFillColorNeutralBackgroundBrush: rgba(134, 134, 134, 0.15);
+    -SystemFillColorSolidNeutralBrush: #6a6a6a;
+    -SystemFillColorSolidNeutralBackgroundBrush: rgba(138, 138, 138, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   根容器：毛玻璃底色 + 边框（圆角/阴影由 Win32 DWM 原生处理）
+   ═══════════════════════════════════════════════════════════════ */
 .root-pane {
-    -fx-background-color: rgba(0, 0, 0, 0.6);
+    -fx-background-color: rgba(0, 0, 0, 0.8);
     -fx-border-color: rgba(255, 255, 255, 0.10);
     -fx-border-width: 1;
     -fx-padding: 14;
 }
 
-/* 输入框：透明、无边框、无圆角、无阴影 */
+/* ═══════════════════════════════════════════════════════════════
+   输入框：透明、无边框、无圆角、无阴影（毛玻璃透底）
+   ═══════════════════════════════════════════════════════════════ */
 .input-field {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
@@ -23,7 +95,6 @@
     -fx-prompt-text-fill: rgba(200, 200, 200, 0.35);
 }
 
-/* 聚焦时无额外样式 */
 .input-field:focused {
     -fx-border-color: transparent;
     -fx-background-color: transparent;

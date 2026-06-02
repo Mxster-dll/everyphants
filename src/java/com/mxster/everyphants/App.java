@@ -18,6 +18,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        // ── 设置 Fluent Design 主题（WinUI 11 风格）──
+        Application.setUserAgentStylesheet("fluent-light.css");
+
         // ── 必须 TRANSPARENT：Acrylic 模糊需要分层窗口 ──
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setTitle("万象");
