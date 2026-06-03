@@ -1,15 +1,18 @@
 package com.mxster.everyphants.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public abstract class Plugin<T> {
     protected String name;
     protected String iconPath;
 
-    protected List<Function<String, T>> mappers = new ArrayList<>();
+    protected List<Function<String, T>> parsers = new ArrayList<>();
+    protected List<Function<T, Result>> formatters = new ArrayList<>();
 
     public Plugin(String name, String iconPath) {
         this.name = name;
@@ -21,12 +24,22 @@ public abstract class Plugin<T> {
     }
 
     public List<Result> query(String query) {
-        return mappers.stream()
-                .map(m -> m.apply(query))
+        List<T> nonNullResults = parsers.stream()
+                .map(parser -> parser.apply(query))
                 .filter(Objects::nonNull)
-                .map(t -> toResult(t))
-                .toList();
-    }
+                .collect(Collectors.toList());
 
-    public abstract Result toResult(T t);
+        if (nonNullResults.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        if (nonNullResults.size() > 1) {
+            System.out.println("[Warning]: parser 冲突 (" + nonNullResults.size() + "), using first one.");
+        }
+
+        T selected = nonNullResults.get(0);
+        return formatters.stream()
+                .map(formatter -> formatter.apply(selected))
+                .collect(Collectors.toList());
+    }
 }
