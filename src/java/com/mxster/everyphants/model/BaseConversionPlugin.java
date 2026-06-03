@@ -11,8 +11,6 @@ public class BaseConversionPlugin extends Plugin<BigInteger> {
     }
 
     public static BigInteger parseToBinary(String s) {
-
-        // Integer.toBinaryString(0);
         try {
             return new BigInteger(s);
         } catch (Exception e) {
