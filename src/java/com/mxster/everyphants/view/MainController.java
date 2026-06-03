@@ -50,8 +50,10 @@ public class MainController {
                 return;
             }
 
+            String text = newVal.trim();
+
             for (var plugin : manager.getPlugins()) {
-                for (var r : plugin.query(newVal)) {
+                for (var r : plugin.query(text)) {
                     var label = new Label(r.title);
                     label.getStyleClass().add("result-item");
                     resultList.getChildren().add(label);
