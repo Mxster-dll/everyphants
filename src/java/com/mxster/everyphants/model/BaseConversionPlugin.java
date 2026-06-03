@@ -4,10 +4,10 @@ import java.math.BigInteger;
 
 public class BaseConversionPlugin extends Plugin<BigInteger> {
 
-    public BaseConversionPlugin(){
+    public BaseConversionPlugin() {
         super("进制转换", null);
 
-        mappers.add(BaseConversionPlugin:: parseToBinary);
+        mappers.add(BaseConversionPlugin::parseToBinary);
     }
 
     public static BigInteger parseToBinary(String s) {
@@ -18,12 +18,11 @@ public class BaseConversionPlugin extends Plugin<BigInteger> {
         }
     }
 
-
     @Override
-    public Result toResult(BigInteger num){
+    public Result toResult(BigInteger num) {
         String title = "Bin:" + num.toString(2) + " Oct:" + num.toString(8) + " Hex:" + num.toString(16);
         Result result = new Result(title, null, 1, null);
-        
+
         return result;
     }
 
