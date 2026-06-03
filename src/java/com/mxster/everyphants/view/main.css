@@ -72,10 +72,10 @@
    根容器：毛玻璃底色 + 边框（圆角/阴影由 Win32 DWM 原生处理）
    ═══════════════════════════════════════════════════════════════ */
 .root-pane {
-    -fx-background-color: #1e1e1e;
-    -fx-border-color: rgba(255, 255, 255, 0.10);
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #ffffff;
     -fx-border-width: 1;
-    -fx-padding: 14;
+    -fx-padding: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -89,37 +89,48 @@
     -fx-border-radius: 0;
     -fx-font-size: 14px;
     -fx-font-family: "Microsoft YaHei";
-    -fx-padding: 8 12;
-    -fx-pref-width: 320;
-    -fx-text-fill: #e8e8e8;
+    -fx-padding: 10 13 18 20;
+    -fx-pref-width: 800;
+    -fx-text-fill: #ffffff;
     -fx-prompt-text-fill: rgba(200, 200, 200, 0.35);
 }
 
 .input-field:focused {
-    -fx-border-color: transparent;
+    -fx-border-color: transpar5t;
     -fx-background-color: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   分割线
+   ═══════════════════════════════════════════════════════════════ */
+.divider {
+    -fx-padding: 0;
+}
+
+.divider .line {
+    -fx-border-color: rgba(255, 255, 255, 0.10);
+    -fx-border-width: 0 0 1 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════
    内容容器 & 结果列表 & 信息栏
    ═══════════════════════════════════════════════════════════════ */
 .content-box {
-    -fx-padding: 8 4;
+    -fx-padding: 8 0 0 0;
 }
 
 .result-list {
-    -fx-background-color: rgba(255, 255, 255, 0.04);
-    -fx-border-color: rgba(255, 255, 255, 0.06);
-    -fx-border-width: 1;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
     -fx-min-height: 120;
     -fx-padding: 6;
 }
 
 .info-pane {
-    -fx-background-color: rgba(255, 255, 255, 0.03);
-    -fx-border-color: rgba(255, 255, 255, 0.05);
-    -fx-border-width: 1;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
     -fx-min-height: 36;
-    -fx-padding: 6 10;
-}
+    -fx-padding: 6 10 12 16;
 }
