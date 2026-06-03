@@ -1,6 +1,8 @@
 package com.mxster.everyphants.model;
 
-public class TestPlugin extends Plugin<Integer> {
+import java.math.BigInteger;
+
+public class TestPlugin extends Plugin<BigInteger> {
 
     public TestPlugin(){
         super("进制转换", null);
@@ -8,11 +10,11 @@ public class TestPlugin extends Plugin<Integer> {
         mappers.add(TestPlugin:: parseToBinary);
     }
 
-    public static Integer parseToBinary(String s) {
+    public static BigInteger parseToBinary(String s) {
 
         // Integer.toBinaryString(0);
         try {
-            return Integer.parseInt(s);
+            return new BigInteger(s);
         } catch (Exception e) {
             return null;
         }
@@ -20,8 +22,8 @@ public class TestPlugin extends Plugin<Integer> {
 
 
     @Override
-    public Result toResult(Integer num){
-        Result result = new Result(Integer.toBinaryString(num), null, 1, null);
+    public Result toResult(BigInteger num){
+        Result result = new Result(num.toString(2), null, 1, null);
         return result;
     }
 
