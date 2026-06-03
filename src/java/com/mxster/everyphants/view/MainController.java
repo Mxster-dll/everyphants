@@ -1,9 +1,13 @@
-package com.mxster.everyphants;
+package com.mxster.everyphants.view;
 
-import javafx.beans.value.ChangeListener;
+import com.mxster.everyphants.model.ColorPlugin;
+import com.mxster.everyphants.model.Plugin;
+
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -16,6 +20,10 @@ public class MainController {
     private StackPane rootPane;
     @FXML
     private TextField inputField;
+    @FXML
+    private Pane resultList;
+    @FXML
+    private Pane infoPane;
 
     private Stage stage;
     private double dragX, dragY;
@@ -27,11 +35,17 @@ public class MainController {
         // ── 窗口拖拽 ──
         rootPane.setOnMousePressed(this::onMousePressed);
         rootPane.setOnMouseDragged(this::onMouseDragged);
-
+        var plugin = new ColorPlugin("颜色", null);
         // ── 内容变化 → 终端输出 ──
         inputField.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null && !newVal.isEmpty()) {
-                System.out.println("[输入] " + newVal);
+            resultList.getChildren().clear();
+            if (newVal != null) {
+                System.out.println(newVal);
+                var rs = plugin.query(newVal);
+                resultList.getChildren().clear();
+                for (var r : rs) {
+                    resultList.getChildren().add(new Label(r.title));
+                }
             }
         });
     }

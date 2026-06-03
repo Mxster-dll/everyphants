@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/19"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.mxster.everyphants.view.MainController"
+           fx:id="rootPane"
+           styleClass="root-pane">
+  <VBox spacing="8" styleClass="content-box">
+    <TextField fx:id="inputField"
+                       styleClass="input-field"
+                       promptText="输入内容…" />
+    <Pane fx:id="resultList"
+                  styleClass="result-list"
+                  VBox.vgrow="ALWAYS" />
+    <Pane fx:id="infoPane"
+                  styleClass="info-pane" />
+  </VBox>
+</StackPane>
