@@ -13,14 +13,14 @@
            styleClass="root-pane">
   <VBox spacing="0" styleClass="content-box">
     <TextField fx:id="inputField"
-                                   styleClass="input-field"
-                                   promptText="输入内容…" />
-    <Separator styleClass="divider"/>
+        styleClass="input-field"
+        promptText="输入内容…" />
+    <Separator fx:id="divider1" styleClass="divider"/>
     <VBox fx:id="resultList"
-                              styleClass="result-list"
-                              VBox.vgrow="ALWAYS" />
-    <Separator styleClass="divider"/>
+        styleClass="result-list"
+        VBox.vgrow="ALWAYS" />
+    <Separator fx:id="divider2" styleClass="divider"/>
     <Pane fx:id="infoPane"
-                              styleClass="info-pane" />
+        styleClass="info-pane" />
   </VBox>
 </StackPane>

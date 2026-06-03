@@ -96,7 +96,7 @@
 }
 
 .input-field:focused {
-    -fx-border-color: transpar5t;
+    -fx-border-color: transparent;
     -fx-background-color: transparent;
 }
 
@@ -123,14 +123,20 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-min-height: 120;
-    -fx-padding: 6;
+    -fx-spacing: 4;
+    -fx-padding: 3 3 10 3;
+}
+
+.result-item {
+    /* -fx-background-color: red; */
+    -fx-pref-height: 41;
+    -fx-padding: 0 0 0 30;
 }
 
 .info-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-min-height: 36;
+    -fx-pref-height: 36;
     -fx-padding: 6 10 12 16;
 }
