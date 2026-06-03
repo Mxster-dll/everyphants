@@ -2,12 +2,12 @@ package com.mxster.everyphants.model;
 
 import java.math.BigInteger;
 
-public class TestPlugin extends Plugin<BigInteger> {
+public class BaseConversionPlugin extends Plugin<BigInteger> {
 
-    public TestPlugin(){
+    public BaseConversionPlugin(){
         super("进制转换", null);
 
-        mappers.add(TestPlugin:: parseToBinary);
+        mappers.add(BaseConversionPlugin:: parseToBinary);
     }
 
     public static BigInteger parseToBinary(String s) {
@@ -23,7 +23,9 @@ public class TestPlugin extends Plugin<BigInteger> {
 
     @Override
     public Result toResult(BigInteger num){
-        Result result = new Result(num.toString(2), null, 1, null);
+        String title = "Bin:" + num.toString(2) + " Oct:" + num.toString(8) + " Hex:" + num.toString(16);
+        Result result = new Result(title, null, 1, null);
+        
         return result;
     }
 
