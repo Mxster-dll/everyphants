@@ -12,12 +12,12 @@
            styleClass="root-pane">
   <VBox spacing="8" styleClass="content-box">
     <TextField fx:id="inputField"
-                       styleClass="input-field"
-                       promptText="输入内容…" />
-    <Pane fx:id="resultList"
-                  styleClass="result-list"
-                  VBox.vgrow="ALWAYS" />
+                           styleClass="input-field"
+                           promptText="输入内容…" />
+    <VBox fx:id="resultList"
+                      styleClass="result-list"
+                      VBox.vgrow="ALWAYS" />
     <Pane fx:id="infoPane"
-                  styleClass="info-pane" />
+                      styleClass="info-pane" />
   </VBox>
 </StackPane>
