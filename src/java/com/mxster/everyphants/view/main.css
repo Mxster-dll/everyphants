@@ -72,7 +72,7 @@
    根容器：毛玻璃底色 + 边框（圆角/阴影由 Win32 DWM 原生处理）
    ═══════════════════════════════════════════════════════════════ */
 .root-pane {
-    -fx-background-color: rgba(0, 0, 0, 0.8);
+    -fx-background-color: #1e1e1e;
     -fx-border-color: rgba(255, 255, 255, 0.10);
     -fx-border-width: 1;
     -fx-padding: 14;
