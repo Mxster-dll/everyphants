@@ -35,7 +35,7 @@ public class MainController {
         // ── 窗口拖拽 ──
         rootPane.setOnMousePressed(this::onMousePressed);
         rootPane.setOnMouseDragged(this::onMouseDragged);
-        var plugin = new ColorPlugin("颜色", null);
+        var plugin = new ColorPlugin();
         // ── 内容变化 → 终端输出 ──
         inputField.textProperty().addListener((obs, oldVal, newVal) -> {
             resultList.getChildren().clear();

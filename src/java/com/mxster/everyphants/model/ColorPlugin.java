@@ -3,9 +3,8 @@ package com.mxster.everyphants.model;
 import javafx.scene.paint.Color;
 
 public class ColorPlugin extends Plugin<Color> {
-
-    public ColorPlugin(String name, String iconPath) {
-        super(name, iconPath);
+    public ColorPlugin() {
+        super("颜色", null);
 
         mappers.add(ColorPlugin::parseWebColor);
     }
@@ -15,7 +14,7 @@ public class ColorPlugin extends Plugin<Color> {
         return new Result(t.toString(), null, 1, null);
     }
 
-    private static Color parseWebColor(String s) {
+    public static Color parseWebColor(String s) {
         try {
             return Color.web(s);
         } catch (IllegalArgumentException e) {
