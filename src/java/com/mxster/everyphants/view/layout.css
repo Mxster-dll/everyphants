@@ -1,0 +1,42 @@
+/* ═══════════════════════════════════════════════════════════════
+   万象 · 布局样式
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 根容器：毛玻璃底色 + 边框（圆角/阴影由 Win32 DWM 原生处理）── */
+.root-pane {
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+}
+
+/* ── 分割线 ── */
+.divider {
+    -fx-padding: 0;
+}
+
+.divider .line {
+    -fx-border-color: rgba(255, 255, 255, 0.10);
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ── 内容容器 ── */
+.content-box {
+    -fx-padding: 8 0 0 0;
+}
+
+.result-list {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-spacing: 4;
+    -fx-padding: 3 3 10 3;
+}
+
+.info-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-pref-height: 36;
+    -fx-padding: 6 10 12 16;
+}

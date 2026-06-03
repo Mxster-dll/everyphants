@@ -1,0 +1,29 @@
+/* ═══════════════════════════════════════════════════════════════
+   万象 · 控件样式
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 输入框：透明、无边框、无圆角、无阴影（毛玻璃透底）── */
+.input-field {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+    -fx-font-size: 14px;
+    -fx-font-family: "Microsoft YaHei";
+    -fx-padding: 10 13 18 20;
+    -fx-pref-width: 800;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: rgba(200, 200, 200, 0.35);
+}
+
+.input-field:focused {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+/* ── 结果项 ── */
+.result-item {
+    -fx-pref-height: 41;
+    -fx-padding: 0 0 0 30;
+}
