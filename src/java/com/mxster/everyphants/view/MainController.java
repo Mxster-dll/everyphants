@@ -1,9 +1,5 @@
 package com.mxster.everyphants.view;
 
-import com.mxster.everyphants.model.BaseConversionPlugin;
-import com.mxster.everyphants.model.ColorPlugin;
-import com.mxster.everyphants.model.TimePlugin;
-import com.mxster.everyphants.model.Plugin;
 import com.mxster.everyphants.model.PluginManager;
 
 import javafx.fxml.FXML;
@@ -32,7 +28,6 @@ public class MainController {
     private Stage stage;
     private double dragX, dragY;
 
-    /** 由 App.java 注入 Stage，设置拖拽与毛玻璃 */
     public void init(Stage stage) {
         this.stage = stage;
 
@@ -41,10 +36,6 @@ public class MainController {
         rootPane.setOnMouseDragged(this::onMouseDragged);
 
         PluginManager manager = new PluginManager();
-
-        manager.addPlugin(new ColorPlugin());
-        manager.addPlugin(new BaseConversionPlugin());
-        manager.addPlugin(new TimePlugin());
 
         // ── 内容变化 → 终端输出 ──
         inputField.textProperty().addListener((obs, oldVal, newVal) -> {
