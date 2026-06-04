@@ -9,7 +9,8 @@ public class PluginManager {
             new TimePlugin(),
             new BaseConversionPlugin(),
             new ColorPlugin(),
-            new TranslatePlugin()));
+            new TranslatePlugin(),
+            new AnswerBookPlugin()));
 
     public List<Plugin<?>> getPlugins() {
         return plugins;
