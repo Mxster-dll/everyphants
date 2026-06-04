@@ -8,54 +8,58 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.application.Platform;
 
-/**
- * 翻译插件 —— 使用百度翻译 API
- * <p>
- * 使用方式：输入 "翻译 hello" 或 "fy hello" 即可将文本翻译为中文。
- * <p>
- * 使用前请先到 https://fanyi-api.baidu.com/ 注册并获取 APP_ID 和 SECRET_KEY，
- * 替换下方常量即可。
- */
 public class TranslatePlugin extends Plugin<String> {
-
-    // ═══════════════════════════════════════════
-    // 百度翻译 API 配置 —— 请替换为你自己的
-    // ═══════════════════════════════════════════
-    private static final String APP_ID = "20250809002427356";
-    private static final String SECRET_KEY = "AMgWkgVaYz3tzUGsd_9_";
+    private static final String APP_ID;
+    private static final String SECRET_KEY;
     private static final String API_URL = "https://fanyi-api.baidu.com/api/trans/vip/translate";
 
-    /** 翻译完成后的回调（在 JavaFX 线程上执行） */
+    static {
+        String appId = null;
+        String secretKey = null;
+        try {
+            Path settingsPath = Paths.get("src/resources/settings.json");
+            String content = Files.readString(settingsPath);
+            appId = readJsonValue(content, "baidu-fanyi-appid");
+            secretKey = readJsonValue(content, "baidu-fanyi-api-key");
+        } catch (Exception e) {
+            System.err.println("[TranslatePlugin] 无法读取 settings.json: " + e.getMessage());
+        }
+        APP_ID = appId != null ? appId : "";
+        SECRET_KEY = secretKey != null ? secretKey : "";
+    }
+
+    private static String readJsonValue(String json, String key) {
+        Matcher m = Pattern.compile("\"" + key + "\"\\s*:\\s*\"([^\"]*)\"").matcher(json);
+        return m.find() ? m.group(1) : null;
+    }
+
     private Runnable onResultReady;
 
-    /** 缓存：上次查询的原文 → 译文 */
     private volatile String lastQueryText;
     private volatile String lastTranslatedText;
 
     public TranslatePlugin() {
         super("翻译", null);
 
-        // 解析器：匹配 "翻译 xxx" 或 "fy xxx"
         parsers.add(this::parseTranslateCommand);
 
-        // 格式化器：调用 API 翻译为中文
         formatters.add(this::translateToChinese);
     }
 
-    /** 设置翻译完成后的回调（回调在 JavaFX 线程执行） */
     public void setOnResultReady(Runnable callback) {
         this.onResultReady = callback;
     }
 
-    /**
-     * 解析翻译命令，提取待翻译文本。
-     * 支持格式：翻译 &lt;文本&gt; 或 fy &lt;文本&gt;
-     */
     public String parseTranslateCommand(String input) {
         if (input == null || input.isEmpty()) {
             return null;
@@ -63,13 +67,11 @@ public class TranslatePlugin extends Plugin<String> {
 
         String text = input.trim();
 
-        // 匹配 "翻译 " 前缀
         if (text.startsWith("翻译 ")) {
             String content = text.substring(3).trim();
             return content.isEmpty() ? null : content;
         }
 
-        // 匹配 "fy " 前缀
         if (text.startsWith("fy ")) {
             String content = text.substring(3).trim();
             return content.isEmpty() ? null : content;
@@ -78,16 +80,11 @@ public class TranslatePlugin extends Plugin<String> {
         return null;
     }
 
-    /**
-     * 调用百度翻译 API，将文本翻译为中文（异步，不阻塞 UI）
-     */
     public Result translateToChinese(String text) {
-        // 命中缓存 → 直接返回
         if (text.equals(lastQueryText) && lastTranslatedText != null) {
             return new Result(lastTranslatedText, text, 1, null);
         }
 
-        // 发起异步翻译
         final String queryText = text;
         new Thread(() -> {
             try {
@@ -105,19 +102,10 @@ public class TranslatePlugin extends Plugin<String> {
             }
         }, "Translate-Worker").start();
 
-        // 立即返回上次翻译结果，避免闪烁空占位
         String placeholder = lastTranslatedText != null ? lastTranslatedText : "翻译中…";
         return new Result(placeholder, text, 1, null);
     }
 
-    /**
-     * 调用百度翻译 API
-     *
-     * @param query 待翻译文本
-     * @param from  源语言（auto 为自动检测）
-     * @param to    目标语言
-     * @return 翻译结果
-     */
     private String baiduTranslate(String query, String from, String to) throws Exception {
         String salt = Integer.toString(new Random().nextInt(100000));
         String sign = md5(APP_ID + query + salt + SECRET_KEY);
@@ -152,11 +140,6 @@ public class TranslatePlugin extends Plugin<String> {
         return extractDstFromJson(json);
     }
 
-    /**
-     * 从百度翻译 API 返回的 JSON 中提取翻译结果。
-     * 响应格式:
-     * {"from":"en","to":"zh","trans_result":[{"src":"hello","dst":"\u4f60\u597d"}]}
-     */
     private String extractDstFromJson(String json) {
         String marker = "\"dst\":\"";
         int start = json.indexOf(marker);
@@ -180,10 +163,6 @@ public class TranslatePlugin extends Plugin<String> {
         return decodeUnicodeEscapes(raw);
     }
 
-    /**
-     * 将字符串中的 \\uXXXX Unicode 转义序列解码为实际字符。
-     * 例如 "\\u4f60" → "你"
-     */
     private String decodeUnicodeEscapes(String s) {
         if (s == null || s.isEmpty()) {
             return s;
@@ -209,9 +188,6 @@ public class TranslatePlugin extends Plugin<String> {
         return sb.toString();
     }
 
-    /**
-     * MD5 哈希
-     */
     private String md5(String input) throws Exception {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] digest = md.digest(input.getBytes(StandardCharsets.UTF_8));
