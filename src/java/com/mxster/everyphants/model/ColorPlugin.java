@@ -7,11 +7,16 @@ public class ColorPlugin extends Plugin<Color> {
         super("颜色", null);
 
         parsers.add(this::parseWebColor);
-        formatters.add(this::toResult);
+        formatters.add(this::hexColorText);
     }
 
-    public Result toResult(Color t) {
-        return new Result(t.toString(), null, 1, null);
+    public Result hexColorText(Color color) {
+        String colorText = color.toString().substring(2);
+        if (colorText.endsWith("ff")) {
+            colorText = colorText.substring(0, 6);
+        }
+
+        return new Result("#" + colorText, null, 1, null);
     }
 
     public Color parseWebColor(String s) {

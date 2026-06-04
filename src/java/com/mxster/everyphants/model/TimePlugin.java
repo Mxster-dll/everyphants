@@ -7,18 +7,27 @@ public class TimePlugin extends Plugin<Date> {
         super("获取时间", null);
 
         parsers.add(this::parseToTime);
-        formatters.add(this::toResult);
+        formatters.add(this::time);
+        formatters.add(this::timestamp);
     }
 
     public Date parseToTime(String s) {
-        if (s.toUpperCase().equals("TIME"))
+        if (s.toUpperCase().equals("TIME")) {
             return new Date();
-        else
+        } else {
             return null;
+        }
     }
 
-    public Result toResult(Date date) {
+    public Result time(Date date) {
         String s = date.toString();
+        Result result = new Result(s, null, 1, null);
+
+        return result;
+    }
+
+    public Result timestamp(Date date) {
+        String s = Long.toString(date.getTime());
         Result result = new Result(s, null, 1, null);
 
         return result;
