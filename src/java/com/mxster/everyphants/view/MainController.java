@@ -2,6 +2,7 @@ package com.mxster.everyphants.view;
 
 import com.mxster.everyphants.model.PluginManager;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -12,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * FXML 控制器 —— 输入框内容变化时输出到终端。
@@ -34,6 +36,11 @@ public class MainController {
     private Stage stage;
     private double dragX, dragY;
 
+    /** 节流：两次更新之间至少间隔 250ms，首次更新立即执行 */
+    private static final long MIN_UPDATE_INTERVAL = 250; // ms
+    private long lastUpdateTime = 0;
+    private final PauseTransition throttle = new PauseTransition();
+
     public void init(Stage stage) {
         this.stage = stage;
 
@@ -43,26 +50,50 @@ public class MainController {
 
         PluginManager manager = new PluginManager();
 
-        // ── 内容变化 → 终端输出 ──
+        // ── 节流更新：延迟到期时用最新文本刷新结果列表 ──
+        throttle.setOnFinished(e -> {
+            doUpdate(manager);
+        });
+
+        // ── 内容变化 → 节流处理 ──
         inputField.textProperty().addListener((obs, oldVal, newVal) -> {
-            resultList.getChildren().clear();
-            if (newVal == null || newVal.isEmpty()) {
-                updateResultVisibility();
-                return;
+            long now = System.currentTimeMillis();
+            long elapsed = now - lastUpdateTime;
+
+            if (elapsed >= MIN_UPDATE_INTERVAL) {
+                // 距上次更新已超过 250ms，立即更新
+                throttle.stop();
+                doUpdate(manager);
+            } else {
+                // 距上次更新不足 250ms，推迟到剩余时间后更新
+                throttle.stop();
+                throttle.setDuration(Duration.millis(MIN_UPDATE_INTERVAL - elapsed));
+                throttle.play();
             }
-
-            String text = newVal.trim();
-
-            for (var plugin : manager.getPlugins()) {
-                for (var r : plugin.query(text)) {
-                    resultList.getChildren().add(createResultItem(r.title, r.displayText));
-                }
-            }
-
-            updateResultVisibility();
         });
 
         // 初始状态：无结果，隐藏底部区域
+        updateResultVisibility();
+    }
+
+    /** 执行一次结果列表更新，并记录更新时间 */
+    private void doUpdate(PluginManager manager) {
+        lastUpdateTime = System.currentTimeMillis();
+
+        String text = inputField.getText();
+        resultList.getChildren().clear();
+        if (text == null || text.isEmpty()) {
+            updateResultVisibility();
+            return;
+        }
+
+        String trimmed = text.trim();
+        for (var plugin : manager.getPlugins()) {
+            for (var r : plugin.query(trimmed)) {
+                resultList.getChildren().add(createResultItem(r.title, r.displayText));
+            }
+        }
+
         updateResultVisibility();
     }
 
