@@ -10,7 +10,8 @@ public class PluginManager {
             new BaseConversionPlugin(),
             new ColorPlugin(),
             new TranslatePlugin(),
-            new AnswerBookPlugin()));
+            new AnswerBookPlugin(),
+            new RamdonPlugin()));
 
     public List<Plugin<?>> getPlugins() {
         return plugins;
