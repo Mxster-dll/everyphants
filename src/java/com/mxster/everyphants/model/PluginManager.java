@@ -8,7 +8,8 @@ public class PluginManager {
     private static final List<Plugin<?>> plugins = new ArrayList<>(Arrays.asList(
             new TimePlugin(),
             new BaseConversionPlugin(),
-            new ColorPlugin()));
+            new ColorPlugin(),
+            new TranslatePlugin()));
 
     public List<Plugin<?>> getPlugins() {
         return plugins;
