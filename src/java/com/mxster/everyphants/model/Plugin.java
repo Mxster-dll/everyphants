@@ -34,7 +34,7 @@ public abstract class Plugin<T> {
         }
 
         if (nonNullResults.size() > 1) {
-            System.out.println("[Warning]: parser 冲突 (" + nonNullResults.size() + "), using first one.");
+            System.out.println("[Warning]: parser 冲突 (" + nonNullResults.size() + "), 已采用第一个匹配");
         }
 
         T selected = nonNullResults.get(0);
