@@ -24,6 +24,21 @@
 
 /* ── 结果项 ── */
 .result-item {
-    -fx-pref-height: 41;
+    /* -fx-background-color: red; */
+    -fx-pref-height: 54;
     -fx-padding: 0 0 0 30;
+    -fx-alignment: CENTER-LEFT;
+    -fx-spacing: 2;
+}
+
+.result-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #e8e8e8;
+    -fx-font-family: "Microsoft YaHei";
+}
+
+.result-body {
+    -fx-font-size: 12px;
+    -fx-text-fill: #a0a0a0;
+    -fx-font-family: "Microsoft YaHei";
 }

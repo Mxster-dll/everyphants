@@ -47,12 +47,14 @@ public class BaseConversionPlugin extends Plugin<BigInteger> {
     }
 
     public Result simpleBase(BigInteger num) {
+        String dec = addSpacesFromLow(num.toString(), 3);
+
         String hex = addSpacesFromLow(num.toString(16).toUpperCase(), 4);
         String bin = addSpacesFromLow(num.toString(2), 4);
         String oct = addSpacesFromLow(num.toString(8), 4);
 
         String text = String.format("Hex %s  ·  Bin %s  ·  Oct %s", hex, bin, oct);
-        Result result = new Result(text, null, 1, null);
+        Result result = new Result(dec, text, 1, null);
 
         return result;
     }

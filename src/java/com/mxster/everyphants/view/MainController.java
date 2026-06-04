@@ -3,6 +3,7 @@ package com.mxster.everyphants.view;
 import com.mxster.everyphants.model.PluginManager;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
@@ -54,9 +55,7 @@ public class MainController {
 
             for (var plugin : manager.getPlugins()) {
                 for (var r : plugin.query(text)) {
-                    var label = new Label(r.title);
-                    label.getStyleClass().add("result-item");
-                    resultList.getChildren().add(label);
+                    resultList.getChildren().add(createResultItem(r.title, r.displayText));
                 }
             }
 
@@ -89,5 +88,23 @@ public class MainController {
     private void onMouseDragged(MouseEvent e) {
         stage.setX(e.getScreenX() + dragX);
         stage.setY(e.getScreenY() + dragY);
+    }
+
+    /** 构建一条结果项：标题竖直居中左对齐；有正文时二者作为整体竖直居中左对齐 */
+    private Node createResultItem(String title, String body) {
+        VBox item = new VBox();
+        item.getStyleClass().add("result-item");
+
+        Label titleLabel = new Label(title);
+        titleLabel.getStyleClass().add("result-title");
+        item.getChildren().add(titleLabel);
+
+        if (body != null && !body.isEmpty()) {
+            Label bodyLabel = new Label(body);
+            bodyLabel.getStyleClass().add("result-body");
+            item.getChildren().add(bodyLabel);
+        }
+
+        return item;
     }
 }
