@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Random;
 
+import javafx.application.Platform;
+
 /**
  * 翻译插件 —— 使用百度翻译 API
  * <p>
@@ -28,6 +30,13 @@ public class TranslatePlugin extends Plugin<String> {
     private static final String SECRET_KEY = "AMgWkgVaYz3tzUGsd_9_";
     private static final String API_URL = "https://fanyi-api.baidu.com/api/trans/vip/translate";
 
+    /** 翻译完成后的回调（在 JavaFX 线程上执行） */
+    private Runnable onResultReady;
+
+    /** 缓存：上次查询的原文 → 译文 */
+    private volatile String lastQueryText;
+    private volatile String lastTranslatedText;
+
     public TranslatePlugin() {
         super("翻译", null);
 
@@ -36,6 +45,11 @@ public class TranslatePlugin extends Plugin<String> {
 
         // 格式化器：调用 API 翻译为中文
         formatters.add(this::translateToChinese);
+    }
+
+    /** 设置翻译完成后的回调（回调在 JavaFX 线程执行） */
+    public void setOnResultReady(Runnable callback) {
+        this.onResultReady = callback;
     }
 
     /**
@@ -65,15 +79,35 @@ public class TranslatePlugin extends Plugin<String> {
     }
 
     /**
-     * 调用百度翻译 API，将文本翻译为中文
+     * 调用百度翻译 API，将文本翻译为中文（异步，不阻塞 UI）
      */
     public Result translateToChinese(String text) {
-        try {
-            String translated = baiduTranslate(text, "auto", "zh");
-            return new Result(translated, text, 1, null);
-        } catch (Exception e) {
-            return new Result("翻译失败: " + e.getMessage(), null, 0, null);
+        // 命中缓存 → 直接返回
+        if (text.equals(lastQueryText) && lastTranslatedText != null) {
+            return new Result(lastTranslatedText, text, 1, null);
         }
+
+        // 发起异步翻译
+        final String queryText = text;
+        new Thread(() -> {
+            try {
+                String translated = baiduTranslate(queryText, "auto", "zh");
+                lastQueryText = queryText;
+                lastTranslatedText = translated;
+            } catch (Exception e) {
+                lastQueryText = queryText;
+                lastTranslatedText = "翻译失败: " + e.getMessage();
+            }
+
+            // 通知 UI 刷新
+            if (onResultReady != null) {
+                Platform.runLater(onResultReady);
+            }
+        }, "Translate-Worker").start();
+
+        // 立即返回上次翻译结果，避免闪烁空占位
+        String placeholder = lastTranslatedText != null ? lastTranslatedText : "翻译中…";
+        return new Result(placeholder, text, 1, null);
     }
 
     /**

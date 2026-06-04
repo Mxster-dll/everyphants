@@ -1,6 +1,7 @@
 package com.mxster.everyphants.view;
 
 import com.mxster.everyphants.model.PluginManager;
+import com.mxster.everyphants.model.TranslatePlugin;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -49,6 +50,13 @@ public class MainController {
         rootPane.setOnMouseDragged(this::onMouseDragged);
 
         PluginManager manager = new PluginManager();
+
+        // ── 为翻译插件设置异步回调，翻译完成后自动刷新界面 ──
+        for (var plugin : manager.getPlugins()) {
+            if (plugin instanceof TranslatePlugin tp) {
+                tp.setOnResultReady(() -> doUpdate(manager));
+            }
+        }
 
         // ── 节流更新：延迟到期时用最新文本刷新结果列表 ──
         throttle.setOnFinished(e -> {
