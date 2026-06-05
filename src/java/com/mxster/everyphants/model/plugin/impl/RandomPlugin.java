@@ -1,11 +1,12 @@
 package com.mxster.everyphants.model.plugin.impl;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
-public class RandomPlugin extends ReactivePlugin<String> {
+public class RandomPlugin extends ReactivePlugin<BigInteger> {
     public RandomPlugin() {
         super("生成随机数", null);
 
@@ -13,21 +14,29 @@ public class RandomPlugin extends ReactivePlugin<String> {
         formatters.add(this::rand);
     }
 
-    public String parseToRandom(String s) {
-        if (s.toUpperCase().equals("RANDOM")) {
-            return s;
-        } else {
+    public BigInteger parseToRandom(String s) {
+        try {
+            var num = new BigInteger(s);
+
+            if (num.compareTo(BigInteger.ZERO) <= 0) {
+                return null;
+            }
+
+            return num;
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public Result rand(String s) {
+    public Result rand(BigInteger num) {
         Random random = new Random();
-        int n = random.nextInt(90) + 10;
-        String str = Integer.toString(n);
 
-        Result result = new Result(str, null, 1, null);
+        BigInteger result;
+        do {
+            result = new BigInteger(num.bitLength(), random);
+        } while (result.compareTo(num) > 0);
 
-        return result;
+        String range = "[0, " + num.toString() + "]";
+        return new Result(result.toString(), range, 1, null);
     }
 }
