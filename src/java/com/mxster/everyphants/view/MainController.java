@@ -65,6 +65,10 @@ public class MainController {
 
         // ── 内容变化 → 节流处理 ──
         inputField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.trim().equals(oldVal.trim())) {
+                return;
+            }
+
             long now = System.currentTimeMillis();
             long elapsed = now - lastUpdateTime;
 
