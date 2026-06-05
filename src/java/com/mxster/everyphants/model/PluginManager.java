@@ -11,7 +11,7 @@ public class PluginManager {
             new ColorPlugin(),
             new TranslatePlugin(),
             new AnswerBookPlugin(),
-            new RamdonPlugin()));
+            new RandomPlugin()));
 
     public List<Plugin<?>> getPlugins() {
         return plugins;
