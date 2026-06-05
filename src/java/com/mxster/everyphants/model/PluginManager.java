@@ -5,15 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PluginManager {
-    private static final List<Plugin<?>> plugins = new ArrayList<>(Arrays.asList(
-            new TimePlugin(),
+    private static final List<Plugin> plugins = new ArrayList<>(Arrays.asList(
             new BaseConversionPlugin(),
             new ColorPlugin(),
+            new RandomPlugin(),
             new TranslatePlugin(),
             new AnswerBookPlugin(),
-            new RandomPlugin()));
+            new TimePlugin()));
 
-    public List<Plugin<?>> getPlugins() {
+    public List<Plugin> getPlugins() {
         return plugins;
     }
 }

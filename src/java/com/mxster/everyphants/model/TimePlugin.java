@@ -2,34 +2,34 @@ package com.mxster.everyphants.model;
 
 import java.util.Date;
 
-public class TimePlugin extends Plugin<Date> {
+public class TimePlugin extends ProactivePlugin<Date> implements Refreshable {
+    protected int refreshInterval = 1000;
+
     public TimePlugin() {
-        super("获取时间", null);
+        super("时间", null);
 
-        parsers.add(this::parseToTime);
-        formatters.add(this::time);
-        formatters.add(this::timestamp);
+        formatters.add(this::showTime);
     }
 
-    public Date parseToTime(String s) {
-        if (s.toUpperCase().equals("TIME")) {
-            return new Date();
-        } else {
-            return null;
-        }
+    @Override
+    public int getRefreshInterval() {
+        return refreshInterval;
     }
 
-    public Result time(Date date) {
-        String s = date.toString();
-        Result result = new Result(s, null, 1, null);
-
-        return result;
+    @Override
+    public void setRefreshInterval(int millis) {
+        this.refreshInterval = millis;
     }
 
-    public Result timestamp(Date date) {
-        String s = Long.toString(date.getTime());
-        Result result = new Result(s, null, 1, null);
+    @Override
+    public Date fetch() {
+        return new Date();
+    }
 
-        return result;
+    public Result showTime(Date date) {
+        String time = date.toString();
+        String timestamp = Long.toString(date.getTime());
+
+        return new Result(time, timestamp, 2, null);
     }
 }

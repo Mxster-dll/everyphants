@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 import javafx.application.Platform;
 
-public class TranslatePlugin extends Plugin<String> {
+public class TranslatePlugin extends ReactivePlugin<String> {
     private static final String APP_ID;
     private static final String SECRET_KEY;
     private static final String API_URL = "https://fanyi-api.baidu.com/api/trans/vip/translate";

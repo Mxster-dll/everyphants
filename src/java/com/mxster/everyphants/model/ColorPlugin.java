@@ -2,7 +2,7 @@ package com.mxster.everyphants.model;
 
 import javafx.scene.paint.Color;
 
-public class ColorPlugin extends Plugin<Color> {
+public class ColorPlugin extends ReactivePlugin<Color> {
     public ColorPlugin() {
         super("颜色", null);
 

@@ -2,7 +2,7 @@ package com.mxster.everyphants.model;
 
 import java.math.BigInteger;
 
-public class BaseConversionPlugin extends Plugin<BigInteger> {
+public class BaseConversionPlugin extends ReactivePlugin<BigInteger> {
 
     public BaseConversionPlugin() {
         super("进制转换", null);

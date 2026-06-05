@@ -1,6 +1,8 @@
 package com.mxster.everyphants.view;
 
 import com.mxster.everyphants.model.PluginManager;
+import com.mxster.everyphants.model.ProactivePlugin;
+import com.mxster.everyphants.model.ReactivePlugin;
 import com.mxster.everyphants.model.TranslatePlugin;
 
 import javafx.animation.PauseTransition;
@@ -101,8 +103,14 @@ public class MainController {
 
         String trimmed = text.trim();
         for (var plugin : manager.getPlugins()) {
-            for (var r : plugin.query(trimmed)) {
-                resultList.getChildren().add(createResultItem(r.title, r.displayText));
+            if (plugin instanceof ReactivePlugin<?> rp) {
+                for (var r : rp.query(trimmed)) {
+                    resultList.getChildren().add(createResultItem(r.title, r.displayText));
+                }
+            } else if (plugin instanceof ProactivePlugin<?> pp) {
+                for (var r : pp.query()) {
+                    resultList.getChildren().add(createResultItem(r.title, r.displayText));
+                }
             }
         }
 

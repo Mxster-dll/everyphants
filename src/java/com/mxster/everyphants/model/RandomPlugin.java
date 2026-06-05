@@ -2,7 +2,7 @@ package com.mxster.everyphants.model;
 
 import java.util.Random;
 
-public class RandomPlugin extends Plugin<String> {
+public class RandomPlugin extends ReactivePlugin<String> {
     public RandomPlugin() {
         super("生成随机数", null);
 
