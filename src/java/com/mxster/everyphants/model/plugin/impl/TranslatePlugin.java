@@ -1,4 +1,4 @@
-package com.mxster.everyphants.model;
+package com.mxster.everyphants.model.plugin.impl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,6 +15,9 @@ import java.security.MessageDigest;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.mxster.everyphants.model.Result;
+import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 import javafx.application.Platform;
 

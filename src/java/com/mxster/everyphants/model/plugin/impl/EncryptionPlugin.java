@@ -1,4 +1,4 @@
-package com.mxster.everyphants.model;
+package com.mxster.everyphants.model.plugin.impl;
 
 public class EncryptionPlugin {
 

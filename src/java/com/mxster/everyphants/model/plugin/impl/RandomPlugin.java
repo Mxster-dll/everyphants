@@ -1,6 +1,9 @@
-package com.mxster.everyphants.model;
+package com.mxster.everyphants.model.plugin.impl;
 
 import java.util.Random;
+
+import com.mxster.everyphants.model.Result;
+import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class RandomPlugin extends ReactivePlugin<String> {
     public RandomPlugin() {

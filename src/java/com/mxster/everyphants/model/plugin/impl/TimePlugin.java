@@ -1,6 +1,10 @@
-package com.mxster.everyphants.model;
+package com.mxster.everyphants.model.plugin.impl;
 
 import java.util.Date;
+
+import com.mxster.everyphants.model.Result;
+import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
+import com.mxster.everyphants.model.plugin.core.Refreshable;
 
 public class TimePlugin extends ProactivePlugin<Date> implements Refreshable {
     protected int refreshInterval = 1000;

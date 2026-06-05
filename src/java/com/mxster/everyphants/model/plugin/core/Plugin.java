@@ -1,4 +1,4 @@
-package com.mxster.everyphants.model;
+package com.mxster.everyphants.model.plugin.core;
 
 public abstract class Plugin {
     protected String name;

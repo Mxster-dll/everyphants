@@ -1,9 +1,9 @@
 package com.mxster.everyphants.view;
 
 import com.mxster.everyphants.model.PluginManager;
-import com.mxster.everyphants.model.ProactivePlugin;
-import com.mxster.everyphants.model.ReactivePlugin;
-import com.mxster.everyphants.model.TranslatePlugin;
+import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
+import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
+import com.mxster.everyphants.model.plugin.impl.TranslatePlugin;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;

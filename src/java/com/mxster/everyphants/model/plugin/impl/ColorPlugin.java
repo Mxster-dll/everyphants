@@ -1,4 +1,7 @@
-package com.mxster.everyphants.model;
+package com.mxster.everyphants.model.plugin.impl;
+
+import com.mxster.everyphants.model.Result;
+import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 import javafx.scene.paint.Color;
 
