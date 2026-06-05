@@ -1,8 +1,21 @@
 package com.mxster.everyphants.model.plugin.impl;
 
-public class EncryptionPlugin {
+import java.util.function.Function;
 
-    public static String Caesar(String s) {
+import com.mxster.everyphants.model.Result;
+import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
+
+public class EncryptionPlugin extends ReactivePlugin<String> {
+    public EncryptionPlugin() {
+        super("加密", null);
+
+        parsers.add(Function.identity());
+
+        formatters.add(this::buildCaesar);
+        formatters.add(this::buildFence);
+    }
+
+    public static String caesar(String s) {
         int l = s.length();
         String s1 = "";
 
@@ -13,7 +26,11 @@ public class EncryptionPlugin {
         return s1;
     }
 
-    public static String Fence(String s) {
+    public Result buildCaesar(String s) {
+        return new Result(caesar(s), "凯撒加密(3)", 0.5, null);
+    }
+
+    public static String fence(String s) {
         int l = s.length();
         String s1 = "";
         String s2 = "";
@@ -33,6 +50,10 @@ public class EncryptionPlugin {
                 s3 += s2.charAt(i);
         }
         return s3;
+    }
+
+    public Result buildFence(String s) {
+        return new Result(fence(s), "栅栏加密", 0.5, null);
     }
 
 }
