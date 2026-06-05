@@ -15,15 +15,20 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
         formatters.add(this::buildFence);
     }
 
+    private static final int CAESAR_SHIFT = 3;
+
     public static String caesar(String s) {
-        int l = s.length();
-        String s1 = "";
-
-        for (int i = 0; i < l; i++) {
-            s1 += s.charAt(i) - 3;
+        StringBuilder sb = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (c >= 'a' && c <= 'z') {
+                sb.append((char) ((c - 'a' + CAESAR_SHIFT) % 26 + 'a'));
+            } else if (c >= 'A' && c <= 'Z') {
+                sb.append((char) ((c - 'A' + CAESAR_SHIFT) % 26 + 'A'));
+            } else {
+                sb.append(c);
+            }
         }
-
-        return s1;
+        return sb.toString();
     }
 
     public Result buildCaesar(String s) {
@@ -31,25 +36,12 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
     }
 
     public static String fence(String s) {
-        int l = s.length();
-        String s1 = "";
-        String s2 = "";
-
-        for (int i = 0; i < l / 2; i++) {
-            s1 += s.charAt(i);
+        StringBuilder rail1 = new StringBuilder();
+        StringBuilder rail2 = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            (i % 2 == 0 ? rail1 : rail2).append(s.charAt(i));
         }
-        for (int i = l / 2; i < l; i++) {
-            s2 += s.charAt(i);
-        }
-
-        String s3 = "";
-        for (int i = 0; i < l / 2; i++) {
-            if (i % 2 == 0)
-                s3 += s1.charAt(i);
-            else
-                s3 += s2.charAt(i);
-        }
-        return s3;
+        return rail1.append(rail2).toString();
     }
 
     public Result buildFence(String s) {
