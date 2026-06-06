@@ -11,6 +11,7 @@ import com.mxster.everyphants.model.plugin.impl.BaseConversionPlugin;
 import com.mxster.everyphants.model.plugin.impl.ColorPlugin;
 import com.mxster.everyphants.model.plugin.impl.EncodingPlugin;
 import com.mxster.everyphants.model.plugin.impl.EncryptionPlugin;
+import com.mxster.everyphants.model.plugin.impl.NumberToChinesePlugin;
 import com.mxster.everyphants.model.plugin.impl.PrimeFactorizationPlugin;
 import com.mxster.everyphants.model.plugin.impl.RandomPlugin;
 import com.mxster.everyphants.model.plugin.impl.TimePlugin;
@@ -23,6 +24,7 @@ public class PluginManager {
             new BaseConversionPlugin(),
             new ColorPlugin(),
             new EncryptionPlugin(),
+            new NumberToChinesePlugin(),
             new EncodingPlugin(),
             new PrimeFactorizationPlugin(),
             new RandomPlugin(),
