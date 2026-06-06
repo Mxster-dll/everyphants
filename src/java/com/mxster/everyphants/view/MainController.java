@@ -1,7 +1,9 @@
 package com.mxster.everyphants.view;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.mxster.everyphants.model.PluginManager;
 import com.mxster.everyphants.model.RefreshableResult;
@@ -11,6 +13,8 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -36,6 +40,7 @@ public class MainController {
     private WindowDragHandler dragHandler;
     private InputThrottle inputThrottle;
     private List<Result> currentResults = List.of();
+    private final Map<Result, VBox> nodeCache = new LinkedHashMap<>();
 
     public void init(Stage stage) {
         this.stage = stage;
@@ -115,11 +120,31 @@ public class MainController {
     }
 
     private void renderResults() {
-        resultList.getChildren().clear();
-        currentResults.stream()
+        List<Result> sorted = currentResults.stream()
                 .sorted((a, b) -> Double.compare(b.getScore(), a.getScore()))
-                .forEach(r -> resultList.getChildren().add(
-                        ResultItemFactory.create(r.getTitle(), r.getDisplayText())));
+                .toList();
+
+        nodeCache.keySet().removeIf(r -> !sorted.contains(r));
+
+        for (Result r : sorted) {
+            VBox node = nodeCache.get(r);
+            if (node == null) {
+                node = (VBox) ResultItemFactory.create(r.getTitle(), r.getDisplayText());
+                nodeCache.put(r, node);
+            } else {
+                Label titleLabel = (Label) node.getChildren().get(0);
+                titleLabel.setText(r.getTitle());
+                if (node.getChildren().size() > 1) {
+                    Label bodyLabel = (Label) node.getChildren().get(1);
+                    String body = r.getDisplayText();
+                    if (body != null && !body.isEmpty()) {
+                        bodyLabel.setText(body);
+                    }
+                }
+            }
+        }
+
+        resultList.getChildren().setAll(sorted.stream().map(nodeCache::get).toList());
         updateResultVisibility();
     }
 

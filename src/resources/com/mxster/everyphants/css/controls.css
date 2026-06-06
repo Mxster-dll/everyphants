@@ -24,11 +24,15 @@
 
 /* ── 结果项 ── */
 .result-item {
-    /* -fx-background-color: red; */
     -fx-pref-height: 54;
     -fx-padding: 0 0 0 30;
     -fx-alignment: CENTER-LEFT;
     -fx-spacing: 2;
+}
+
+.result-item:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-radius: 8;
 }
 
 .result-title {
