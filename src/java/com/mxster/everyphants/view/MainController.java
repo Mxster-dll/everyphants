@@ -103,6 +103,23 @@ public class MainController {
             inputThrottle.trigger();
         });
 
+        Label clearBtn = new Label("✕");
+        clearBtn.setStyle(
+                "-fx-text-fill: rgba(255,255,255,0.3); -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 12 0 0;");
+        clearBtn.setOnMouseClicked(e -> inputField.clear());
+        clearBtn.setOnMouseEntered(e -> clearBtn.setStyle(
+                "-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 12 0 0;"));
+        clearBtn.setOnMouseExited(e -> clearBtn.setStyle(
+                "-fx-text-fill: rgba(255,255,255,0.3); -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 12 0 0;"));
+
+        VBox contentBox = (VBox) rootPane.getChildren().get(0);
+        contentBox.getChildren().remove(inputField);
+        StackPane inputWrapper = new StackPane(inputField, clearBtn);
+        StackPane.setAlignment(clearBtn, javafx.geometry.Pos.CENTER_RIGHT);
+        clearBtn.setTranslateX(-5);
+        clearBtn.setTranslateY(-5);
+        contentBox.getChildren().add(0, inputWrapper);
+
         updateResultVisibility();
     }
 
