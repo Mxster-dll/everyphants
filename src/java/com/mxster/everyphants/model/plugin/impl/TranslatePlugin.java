@@ -24,6 +24,8 @@ import com.mxster.everyphants.model.LoadingResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
+import javafx.scene.paint.Color;
+
 public class TranslatePlugin extends ReactivePlugin<String> {
     private static final String APP_ID;
     private static final String SECRET_KEY;
@@ -58,6 +60,8 @@ public class TranslatePlugin extends ReactivePlugin<String> {
 
         parsers.add(s -> {
             if (s == null || s.isEmpty() || s.matches("\\d+"))
+                return null;
+            if (isNonEnglishColor(s))
                 return null;
             boolean hasLetterOrHan = false;
             for (int i = 0; i < s.length(); i++) {
@@ -139,6 +143,25 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         return block == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
                 || block == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
                 || block == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS;
+    }
+
+    private static boolean isNonEnglishColor(String s) {
+        boolean hasNonEnglish = false;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))) {
+                hasNonEnglish = true;
+                break;
+            }
+        }
+        if (!hasNonEnglish)
+            return false;
+        try {
+            Color.web(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private String translateMixedTo(String text, String targetLang) throws Exception {
