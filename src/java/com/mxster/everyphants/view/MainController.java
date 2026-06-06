@@ -20,7 +20,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -45,6 +48,9 @@ public class MainController {
     private InputThrottle inputThrottle;
     private List<Result> currentResults = List.of();
     private final Map<Result, Node> nodeCache = new LinkedHashMap<>();
+    private Label feedbackLabel;
+    private Label countLabel;
+    private HBox infoBar;
 
     public void init(Stage stage) {
         this.stage = stage;
@@ -71,13 +77,21 @@ public class MainController {
 
         inputThrottle = new InputThrottle(() -> doUpdate(manager));
 
-        Label feedbackLabel = new Label();
-        feedbackLabel.setStyle("-fx-text-fill: #c0c0c0; -fx-font-size: 12px; -fx-alignment: CENTER-LEFT;");
-        feedbackLabel.setPadding(new javafx.geometry.Insets(10, 0, 10, 10));
+        feedbackLabel = new Label();
         feedbackLabel.setOpacity(0);
-        feedbackLabel.setMaxWidth(Double.MAX_VALUE);
-        feedbackLabel.prefHeightProperty().bind(infoPane.heightProperty());
-        infoPane.getChildren().add(feedbackLabel);
+        feedbackLabel.getStyleClass().add("feedback-label");
+
+        countLabel = new Label("0");
+        countLabel.getStyleClass().add("count-label");
+
+        infoBar = new HBox(feedbackLabel, new Region(), countLabel);
+        HBox.setHgrow(infoBar.getChildren().get(1), javafx.scene.layout.Priority.ALWAYS);
+        infoBar.getStyleClass().add("info-bar");
+
+        VBox contentBox = (VBox) rootPane.getChildren().get(0);
+
+        int infoIdx = contentBox.getChildren().indexOf(infoPane);
+        contentBox.getChildren().set(infoIdx, infoBar);
 
         ResultItemFactory.onCopyFeedback = text -> {
             feedbackLabel.setText("已复制: " + text);
@@ -112,7 +126,6 @@ public class MainController {
         clearBtn.setOnMouseExited(e -> clearBtn.setStyle(
                 "-fx-text-fill: rgba(255,255,255,0.3); -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 12 0 0;"));
 
-        VBox contentBox = (VBox) rootPane.getChildren().get(0);
         contentBox.getChildren().remove(inputField);
         StackPane inputWrapper = new StackPane(inputField, clearBtn);
         StackPane.setAlignment(clearBtn, javafx.geometry.Pos.CENTER_RIGHT);
@@ -183,6 +196,7 @@ public class MainController {
         }
 
         resultList.getChildren().setAll(sorted.stream().map(nodeCache::get).toList());
+        countLabel.setText(String.valueOf(sorted.size()));
         updateResultVisibility();
     }
 
@@ -195,8 +209,8 @@ public class MainController {
         divider1.setManaged(hasResults);
         divider2.setVisible(hasResults);
         divider2.setManaged(hasResults);
-        infoPane.setVisible(hasResults);
-        infoPane.setManaged(hasResults);
+        infoBar.setVisible(hasResults);
+        infoBar.setManaged(hasResults);
 
         stage.sizeToScene();
     }
