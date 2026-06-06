@@ -14,7 +14,6 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -40,7 +39,7 @@ public class MainController {
     private WindowDragHandler dragHandler;
     private InputThrottle inputThrottle;
     private List<Result> currentResults = List.of();
-    private final Map<Result, VBox> nodeCache = new LinkedHashMap<>();
+    private final Map<Result, Node> nodeCache = new LinkedHashMap<>();
 
     public void init(Stage stage) {
         this.stage = stage;
@@ -127,20 +126,12 @@ public class MainController {
         nodeCache.keySet().removeIf(r -> !sorted.contains(r));
 
         for (Result r : sorted) {
-            VBox node = nodeCache.get(r);
+            Node node = nodeCache.get(r);
             if (node == null) {
-                node = (VBox) ResultItemFactory.create(r.getTitle(), r.getDisplayText());
+                node = ResultItemFactory.create(r.getTitle(), r.getDisplayText());
                 nodeCache.put(r, node);
             } else {
-                Label titleLabel = (Label) node.getChildren().get(0);
-                titleLabel.setText(r.getTitle());
-                if (node.getChildren().size() > 1) {
-                    Label bodyLabel = (Label) node.getChildren().get(1);
-                    String body = r.getDisplayText();
-                    if (body != null && !body.isEmpty()) {
-                        bodyLabel.setText(body);
-                    }
-                }
+                ResultItemFactory.updateText(node, r.getTitle(), r.getDisplayText());
             }
         }
 
