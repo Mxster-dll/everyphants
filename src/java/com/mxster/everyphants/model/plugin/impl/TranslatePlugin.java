@@ -59,7 +59,16 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         parsers.add(s -> {
             if (s == null || s.isEmpty() || s.matches("\\d+"))
                 return null;
-            return s.trim();
+            boolean hasLetterOrHan = false;
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+                        || Character.UnicodeBlock.of(c) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS) {
+                    hasLetterOrHan = true;
+                    break;
+                }
+            }
+            return hasLetterOrHan ? s.trim() : null;
         });
 
         formatters.add(this::translateToChinese);
