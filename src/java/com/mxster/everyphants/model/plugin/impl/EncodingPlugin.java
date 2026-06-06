@@ -3,7 +3,6 @@ package com.mxster.everyphants.model.plugin.impl;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.function.Function;
 
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
@@ -13,7 +12,7 @@ public class EncodingPlugin extends ReactivePlugin<String> {
     public EncodingPlugin() {
         super("编码");
 
-        parsers.add(Function.identity());
+        parsers.add(s -> s.matches("\\d+") ? null : s);
 
         formatters.add(this::buildUrlEncode);
         formatters.add(this::buildBase64);

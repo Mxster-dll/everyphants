@@ -1,7 +1,5 @@
 package com.mxster.everyphants.model.plugin.impl;
 
-import java.util.function.Function;
-
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
@@ -9,7 +7,7 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
     public EncryptionPlugin() {
         super("加密");
 
-        parsers.add(Function.identity());
+        parsers.add(s -> s.matches("\\d+") ? null : s);
 
         formatters.add(this::buildCaesar);
         formatters.add(this::buildFence);
