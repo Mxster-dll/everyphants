@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,10 +74,27 @@ public class TranslatePlugin extends ReactivePlugin<String> {
 
             new Thread(() -> {
                 try {
-                    String translated = baiduTranslate(key, "auto", "zh");
-                    result.finish(translated, key);
-                    lastTitle = translated;
-                    lastDisplay = key;
+                    LangType lang = detectLang(key);
+                    String titleResult, displayResult;
+
+                    if (lang == LangType.PURE_EN) {
+                        String zh = baiduTranslate(key, "en", "zh");
+                        titleResult = zh;
+                        displayResult = key;
+                    } else if (lang == LangType.PURE_ZH) {
+                        String en = baiduTranslate(key, "zh", "en");
+                        titleResult = en;
+                        displayResult = key;
+                    } else {
+                        String zhResult = translateMixedTo(key, "zh");
+                        String enResult = translateMixedTo(key, "en");
+                        titleResult = zhResult;
+                        displayResult = enResult;
+                    }
+
+                    result.finish(titleResult, displayResult);
+                    lastTitle = titleResult;
+                    lastDisplay = displayResult;
                 } catch (Exception e) {
                     result.finish("翻译失败", key + " 翻译失败");
                 }
@@ -84,6 +103,88 @@ public class TranslatePlugin extends ReactivePlugin<String> {
 
             return result;
         });
+    }
+
+    private enum LangType {
+        PURE_EN, PURE_ZH, MIXED
+    }
+
+    private static LangType detectLang(String text) {
+        boolean hasEn = false, hasZh = false;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (isCJK(c))
+                hasZh = true;
+            else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+                hasEn = true;
+            if (hasEn && hasZh)
+                return LangType.MIXED;
+        }
+        if (hasZh)
+            return LangType.PURE_ZH;
+        return LangType.PURE_EN;
+    }
+
+    private static boolean isCJK(char c) {
+        Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+        return block == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+                || block == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+                || block == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS;
+    }
+
+    private String translateMixedTo(String text, String targetLang) throws Exception {
+        List<String> segments = splitByLang(text);
+        StringBuilder result = new StringBuilder();
+
+        for (String seg : segments) {
+            if (seg.isEmpty())
+                continue;
+            LangType segLang = detectLang(seg);
+            if (segLang == LangType.PURE_ZH) {
+                if (targetLang.equals("zh")) {
+                    result.append(seg);
+                } else {
+                    result.append(baiduTranslate(seg, "zh", "en"));
+                }
+            } else {
+                if (targetLang.equals("en")) {
+                    result.append(seg);
+                } else {
+                    result.append(baiduTranslate(seg, "en", "zh"));
+                }
+            }
+        }
+
+        return result.toString();
+    }
+
+    private static List<String> splitByLang(String text) {
+        List<String> segments = new ArrayList<>();
+        if (text.isEmpty())
+            return segments;
+
+        StringBuilder current = new StringBuilder();
+        Boolean currentIsZh = null;
+
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            boolean isZh = isCJK(c);
+
+            if (currentIsZh == null) {
+                currentIsZh = isZh;
+            } else if (currentIsZh != isZh) {
+                segments.add(current.toString());
+                current.setLength(0);
+                currentIsZh = isZh;
+            }
+            current.append(c);
+        }
+
+        if (current.length() > 0) {
+            segments.add(current.toString());
+        }
+
+        return segments;
     }
 
     private String baiduTranslate(String query, String from, String to) throws Exception {
