@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.mxster.everyphants.model.LoadingResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
@@ -46,7 +47,9 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         return m.find() ? m.group(1) : null;
     }
 
-    private final Map<String, Result> cache = new ConcurrentHashMap<>();
+    private final Map<String, LoadingResult> cache = new ConcurrentHashMap<>();
+    private String lastTitle = null;
+    private String lastDisplay = null;
 
     public TranslatePlugin() {
         super("翻译");
@@ -78,14 +81,19 @@ public class TranslatePlugin extends ReactivePlugin<String> {
 
     public Result translateToChinese(String text) {
         return cache.computeIfAbsent(text, key -> {
-            Result result = new Result("翻译中…", key, 1, null);
+            String titlePrefix = lastTitle != null ? lastTitle : "翻译中";
+            String displayPrefix = lastDisplay != null ? lastDisplay : key;
+
+            LoadingResult result = new LoadingResult(titlePrefix, displayPrefix, 1, null);
 
             new Thread(() -> {
                 try {
                     String translated = baiduTranslate(key, "auto", "zh");
-                    result.setTitle(translated);
+                    result.finish(translated, key);
+                    lastTitle = translated;
+                    lastDisplay = key;
                 } catch (Exception e) {
-                    result.setTitle("翻译失败: " + e.getMessage());
+                    result.finish("翻译失败", key + " 翻译失败");
                 }
                 fireResultChanged();
             }, "Translate-Worker").start();
