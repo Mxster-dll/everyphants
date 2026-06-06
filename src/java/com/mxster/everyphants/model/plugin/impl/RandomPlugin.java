@@ -10,11 +10,11 @@ public class RandomPlugin extends ReactivePlugin<BigInteger> {
     public RandomPlugin() {
         super("生成随机数", null);
 
-        parsers.add(this::parseToRandom);
+        parsers.add(this::parseToUpperBound);
         formatters.add(this::rand);
     }
 
-    public BigInteger parseToRandom(String s) {
+    public BigInteger parseToUpperBound(String s) {
         try {
             var num = new BigInteger(s);
 
@@ -36,7 +36,7 @@ public class RandomPlugin extends ReactivePlugin<BigInteger> {
             result = new BigInteger(num.bitLength(), random);
         } while (result.compareTo(num) > 0);
 
-        String range = "[0, " + num.toString() + "]";
+        String range = "随机数 [0, " + num.toString() + "]";
         return new Result(result.toString(), range, 1, null);
     }
 }
