@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mxster.everyphants.model.PluginManager;
+import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
-import com.mxster.everyphants.model.plugin.impl.TranslatePlugin;
 
+import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -22,11 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-/**
- * FXML 控制器 —— 输入框内容变化时输出到终端。
- */
 public class MainController {
-
     @FXML
     private StackPane rootPane;
     @FXML
@@ -43,7 +40,6 @@ public class MainController {
     private Stage stage;
     private double dragX, dragY;
 
-    /** 节流：两次更新之间至少间隔 250ms，首次更新立即执行 */
     private static final long MIN_UPDATE_INTERVAL = 250; // ms
     private long lastUpdateTime = 0;
     private final PauseTransition throttle = new PauseTransition();
@@ -51,25 +47,31 @@ public class MainController {
     public void init(Stage stage) {
         this.stage = stage;
 
-        // ── 窗口拖拽 ──
         rootPane.setOnMousePressed(this::onMousePressed);
         rootPane.setOnMouseDragged(this::onMouseDragged);
 
         PluginManager manager = new PluginManager();
 
-        // ── 为翻译插件设置异步回调，翻译完成后自动刷新界面 ──
         for (var plugin : manager.getPlugins()) {
-            if (plugin instanceof TranslatePlugin tp) {
-                tp.setOnResultReady(() -> doUpdate(manager));
+            if (plugin instanceof ReactivePlugin<?> rp) {
+                rp.addResultChangedListener(() -> doUpdate(manager));
             }
         }
 
-        // ── 节流更新：延迟到期时用最新文本刷新结果列表 ──
+        // 每帧驱动 interval=0 的 RefreshableResult 刷新
+        AnimationTimer frameTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                doUpdate(manager);
+            }
+        };
+        frameTimer.start();
+
         throttle.setOnFinished(e -> {
+            lastUpdateTime = System.currentTimeMillis();
             doUpdate(manager);
         });
 
-        // ── 内容变化 → 节流处理 ──
         inputField.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.trim().equals(oldVal.trim())) {
                 return;
@@ -81,6 +83,7 @@ public class MainController {
             if (elapsed >= MIN_UPDATE_INTERVAL) {
                 // 距上次更新已超过 250ms，立即更新
                 throttle.stop();
+                lastUpdateTime = System.currentTimeMillis();
                 doUpdate(manager);
             } else {
                 // 距上次更新不足 250ms，推迟到剩余时间后更新
@@ -90,14 +93,10 @@ public class MainController {
             }
         });
 
-        // 初始状态：无结果，隐藏底部区域
         updateResultVisibility();
     }
 
-    /** 执行一次结果列表更新，并记录更新时间 */
     private void doUpdate(PluginManager manager) {
-        lastUpdateTime = System.currentTimeMillis();
-
         String text = inputField.getText();
         resultList.getChildren().clear();
         if (text == null || text.isEmpty()) {
@@ -116,16 +115,23 @@ public class MainController {
             }
         }
 
+        // 驱动 interval=0 的 RefreshableResult 每帧自我更新
+        for (var r : results) {
+            if (r instanceof RefreshableResult rr && rr.getRefreshInterval() == 0) {
+                rr.refresh();
+            }
+        }
+
         results.stream()
-                .sorted((a, b) -> Double.compare(b.score, a.score))
-                .forEach(r -> resultList.getChildren().add(createResultItem(r.title, r.displayText)));
+                .sorted((a, b) -> Double.compare(b.getScore(), a.getScore()))
+                .forEach(r -> resultList.getChildren().add(createResultItem(r.getTitle(), r.getDisplayText())));
 
         updateResultVisibility();
     }
 
-    /** 根据 resultList 是否有子组件来控制底部区域的显隐 */
     private void updateResultVisibility() {
         boolean hasResults = !resultList.getChildren().isEmpty();
+
         resultList.setVisible(hasResults);
         resultList.setManaged(hasResults);
         divider1.setVisible(hasResults);
@@ -134,6 +140,7 @@ public class MainController {
         divider2.setManaged(hasResults);
         infoPane.setVisible(hasResults);
         infoPane.setManaged(hasResults);
+
         stage.sizeToScene();
     }
 
@@ -147,7 +154,6 @@ public class MainController {
         stage.setY(e.getScreenY() + dragY);
     }
 
-    /** 构建一条结果项：标题竖直居中左对齐；有正文时二者作为整体竖直居中左对齐 */
     private Node createResultItem(String title, String body) {
         VBox item = new VBox();
         item.getStyleClass().add("result-item");

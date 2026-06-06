@@ -12,14 +12,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
-
-import javafx.application.Platform;
 
 public class TranslatePlugin extends ReactivePlugin<String> {
     private static final String APP_ID;
@@ -46,10 +46,7 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         return m.find() ? m.group(1) : null;
     }
 
-    private Runnable onResultReady;
-
-    private volatile String lastQueryText;
-    private volatile String lastTranslatedText;
+    private final Map<String, Result> cache = new ConcurrentHashMap<>();
 
     public TranslatePlugin() {
         super("翻译");
@@ -57,10 +54,6 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         parsers.add(this::parseTranslateCommand);
 
         formatters.add(this::translateToChinese);
-    }
-
-    public void setOnResultReady(Runnable callback) {
-        this.onResultReady = callback;
     }
 
     public String parseTranslateCommand(String input) {
@@ -84,29 +77,21 @@ public class TranslatePlugin extends ReactivePlugin<String> {
     }
 
     public Result translateToChinese(String text) {
-        if (text.equals(lastQueryText) && lastTranslatedText != null) {
-            return new Result(lastTranslatedText, text, 1, null);
-        }
+        return cache.computeIfAbsent(text, key -> {
+            Result result = new Result("翻译中…", key, 1, null);
 
-        final String queryText = text;
-        new Thread(() -> {
-            try {
-                String translated = baiduTranslate(queryText, "auto", "zh");
-                lastQueryText = queryText;
-                lastTranslatedText = translated;
-            } catch (Exception e) {
-                lastQueryText = queryText;
-                lastTranslatedText = "翻译失败: " + e.getMessage();
-            }
+            new Thread(() -> {
+                try {
+                    String translated = baiduTranslate(key, "auto", "zh");
+                    result.setTitle(translated);
+                } catch (Exception e) {
+                    result.setTitle("翻译失败: " + e.getMessage());
+                }
+                fireResultChanged();
+            }, "Translate-Worker").start();
 
-            // 通知 UI 刷新
-            if (onResultReady != null) {
-                Platform.runLater(onResultReady);
-            }
-        }, "Translate-Worker").start();
-
-        String placeholder = lastTranslatedText != null ? lastTranslatedText : "翻译中…";
-        return new Result(placeholder, text, 1, null);
+            return result;
+        });
     }
 
     private String baiduTranslate(String query, String from, String to) throws Exception {

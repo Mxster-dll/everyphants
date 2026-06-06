@@ -9,9 +9,13 @@ import java.util.stream.Collectors;
 
 import com.mxster.everyphants.model.Result;
 
+import javafx.application.Platform;
+
 public abstract class ReactivePlugin<T> extends Plugin {
     protected List<Function<String, T>> parsers = new ArrayList<>();
     protected List<Function<T, Result>> formatters = new ArrayList<>();
+
+    private final List<Runnable> resultChangedListeners = new ArrayList<>();
 
     public ReactivePlugin(String name) {
         super(name);
@@ -19,6 +23,21 @@ public abstract class ReactivePlugin<T> extends Plugin {
 
     public ReactivePlugin(String name, String iconPath) {
         super(name, iconPath);
+    }
+
+    public void addResultChangedListener(Runnable listener) {
+        resultChangedListeners.add(listener);
+    }
+
+    protected void fireResultChanged() {
+        if (resultChangedListeners.isEmpty()) {
+            return;
+        }
+        Platform.runLater(() -> {
+            for (Runnable listener : resultChangedListeners) {
+                listener.run();
+            }
+        });
     }
 
     public List<Result> query(String query) {

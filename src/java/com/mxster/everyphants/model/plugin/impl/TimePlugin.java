@@ -2,12 +2,14 @@ package com.mxster.everyphants.model.plugin.impl;
 
 import java.util.Date;
 
+import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
 import com.mxster.everyphants.model.plugin.core.Refreshable;
 
 public class TimePlugin extends ProactivePlugin<Date> implements Refreshable {
-    protected int refreshInterval = 1000;
+    private int refreshInterval = 1000;
+    private RefreshableResult cachedResult;
 
     public TimePlugin() {
         super("时间");
@@ -31,9 +33,15 @@ public class TimePlugin extends ProactivePlugin<Date> implements Refreshable {
     }
 
     public Result showTime(Date date) {
-        String time = date.toString();
-        String timestamp = Long.toString(date.getTime());
-
-        return new Result(time, timestamp, 2, null);
+        if (cachedResult == null) {
+            cachedResult = new RefreshableResult(
+                    date.toString(), Long.toString(date.getTime()), 2, null)
+                    .withRefresh(0, () -> {
+                        Date now = new Date();
+                        cachedResult.setTitle(now.toString());
+                        cachedResult.setDisplayText(Long.toString(now.getTime()));
+                    });
+        }
+        return cachedResult;
     }
 }
