@@ -20,14 +20,14 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
     public PrimeFactorizationPlugin() {
         super("质因数分解");
 
-        parsers.add(this::parseToPositiveInteger);
+        parsers.add(this::parseToInteger);
         formatters.add(this::formatPrimeFactorization);
     }
 
-    public BigInteger parseToPositiveInteger(String s) {
+    public BigInteger parseToInteger(String s) {
         try {
             var num = new BigInteger(s);
-            if (num.compareTo(BigInteger.ZERO) <= 0) {
+            if (num.compareTo(BigInteger.ONE) <= 0) {
                 return null;
             }
             return num;
