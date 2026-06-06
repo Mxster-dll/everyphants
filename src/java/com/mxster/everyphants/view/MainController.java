@@ -12,14 +12,19 @@ import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class MainController {
     @FXML
@@ -65,6 +70,31 @@ public class MainController {
         frameTimer.start();
 
         inputThrottle = new InputThrottle(() -> doUpdate(manager));
+
+        Label feedbackLabel = new Label();
+        feedbackLabel.setStyle("-fx-text-fill: #c0c0c0; -fx-font-size: 12px; -fx-alignment: CENTER-LEFT;");
+        feedbackLabel.setPadding(new javafx.geometry.Insets(10, 0, 10, 10));
+        feedbackLabel.setOpacity(0);
+        feedbackLabel.setMaxWidth(Double.MAX_VALUE);
+        feedbackLabel.prefHeightProperty().bind(infoPane.heightProperty());
+        infoPane.getChildren().add(feedbackLabel);
+
+        ResultItemFactory.onCopyFeedback = text -> {
+            feedbackLabel.setText("已复制: " + text);
+
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(200), feedbackLabel);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+
+            PauseTransition hold = new PauseTransition(Duration.seconds(1.2));
+
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(300), feedbackLabel);
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+
+            SequentialTransition seq = new SequentialTransition(feedbackLabel, fadeIn, hold, fadeOut);
+            seq.play();
+        };
 
         inputField.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.trim().equals(oldVal.trim())) {

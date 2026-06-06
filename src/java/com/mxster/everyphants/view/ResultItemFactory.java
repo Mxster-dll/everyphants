@@ -1,5 +1,7 @@
 package com.mxster.everyphants.view;
 
+import java.util.function.Consumer;
+
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -11,6 +13,8 @@ import javafx.scene.layout.VBox;
 
 public final class ResultItemFactory {
 
+    public static Consumer<String> onCopyFeedback;
+
     private ResultItemFactory() {
     }
 
@@ -20,13 +24,13 @@ public final class ResultItemFactory {
 
         Label titleLabel = new Label(title);
         titleLabel.getStyleClass().add("result-title");
-        titleLabel.setOnMouseClicked(e -> copyToClipboard(titleLabel.getText()));
+        titleLabel.setOnMouseClicked(e -> copyToClipboard(titleLabel));
         item.getChildren().add(titleLabel);
 
         if (body != null && !body.isEmpty()) {
             Label bodyLabel = new Label(body);
             bodyLabel.getStyleClass().add("result-body");
-            bodyLabel.setOnMouseClicked(e -> copyToClipboard(bodyLabel.getText()));
+            bodyLabel.setOnMouseClicked(e -> copyToClipboard(bodyLabel));
             item.getChildren().add(bodyLabel);
         }
 
@@ -69,15 +73,20 @@ public final class ResultItemFactory {
             } else {
                 Label bodyLabel = new Label(body);
                 bodyLabel.getStyleClass().add("result-body");
-                bodyLabel.setOnMouseClicked(e -> copyToClipboard(bodyLabel.getText()));
+                bodyLabel.setOnMouseClicked(e -> copyToClipboard(bodyLabel));
                 item.getChildren().add(bodyLabel);
             }
         }
     }
 
-    private static void copyToClipboard(String text) {
+    private static void copyToClipboard(Label label) {
+        String text = label.getText();
         ClipboardContent content = new ClipboardContent();
         content.putString(text);
         Clipboard.getSystemClipboard().setContent(content);
+
+        if (onCopyFeedback != null) {
+            onCopyFeedback.accept(text);
+        }
     }
 }
