@@ -54,29 +54,13 @@ public class TranslatePlugin extends ReactivePlugin<String> {
     public TranslatePlugin() {
         super("翻译");
 
-        parsers.add(this::parseTranslateCommand);
+        parsers.add(s -> {
+            if (s == null || s.isEmpty() || s.matches("\\d+"))
+                return null;
+            return s.trim();
+        });
 
         formatters.add(this::translateToChinese);
-    }
-
-    public String parseTranslateCommand(String input) {
-        if (input == null || input.isEmpty()) {
-            return null;
-        }
-
-        String text = input.trim();
-
-        if (text.startsWith("翻译 ")) {
-            String content = text.substring(3).trim();
-            return content.isEmpty() ? null : content;
-        }
-
-        if (text.startsWith("fy ")) {
-            String content = text.substring(3).trim();
-            return content.isEmpty() ? null : content;
-        }
-
-        return null;
     }
 
     public Result translateToChinese(String text) {
