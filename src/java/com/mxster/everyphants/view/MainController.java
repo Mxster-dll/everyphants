@@ -10,18 +10,13 @@ import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class MainController {
     @FXML
@@ -38,17 +33,15 @@ public class MainController {
     private Pane infoPane;
 
     private Stage stage;
-    private double dragX, dragY;
-
-    private static final long MIN_UPDATE_INTERVAL = 250; // ms
-    private long lastUpdateTime = 0;
-    private final PauseTransition throttle = new PauseTransition();
+    private WindowDragHandler dragHandler;
+    private InputThrottle inputThrottle;
 
     public void init(Stage stage) {
         this.stage = stage;
 
-        rootPane.setOnMousePressed(this::onMousePressed);
-        rootPane.setOnMouseDragged(this::onMouseDragged);
+        dragHandler = new WindowDragHandler(stage);
+        rootPane.setOnMousePressed(dragHandler::onPressed);
+        rootPane.setOnMouseDragged(dragHandler::onDragged);
 
         PluginManager manager = new PluginManager();
 
@@ -66,30 +59,13 @@ public class MainController {
         };
         frameTimer.start();
 
-        throttle.setOnFinished(e -> {
-            lastUpdateTime = System.currentTimeMillis();
-            doUpdate(manager);
-        });
+        inputThrottle = new InputThrottle(() -> doUpdate(manager));
 
         inputField.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.trim().equals(oldVal.trim())) {
                 return;
             }
-
-            long now = System.currentTimeMillis();
-            long elapsed = now - lastUpdateTime;
-
-            if (elapsed >= MIN_UPDATE_INTERVAL) {
-                // 距上次更新已超过 250ms，立即更新
-                throttle.stop();
-                lastUpdateTime = System.currentTimeMillis();
-                doUpdate(manager);
-            } else {
-                // 距上次更新不足 250ms，推迟到剩余时间后更新
-                throttle.stop();
-                throttle.setDuration(Duration.millis(MIN_UPDATE_INTERVAL - elapsed));
-                throttle.play();
-            }
+            inputThrottle.trigger();
         });
 
         updateResultVisibility();
@@ -114,7 +90,6 @@ public class MainController {
             }
         }
 
-        // 驱动 interval=0 的 RefreshableResult 每帧自我更新
         for (var r : results) {
             if (r instanceof RefreshableResult rr && rr.getRefreshInterval() == 0) {
                 rr.refresh();
@@ -123,7 +98,8 @@ public class MainController {
 
         results.stream()
                 .sorted((a, b) -> Double.compare(b.getScore(), a.getScore()))
-                .forEach(r -> resultList.getChildren().add(createResultItem(r.getTitle(), r.getDisplayText())));
+                .forEach(r -> resultList.getChildren().add(
+                        ResultItemFactory.create(r.getTitle(), r.getDisplayText())));
 
         updateResultVisibility();
     }
@@ -141,32 +117,5 @@ public class MainController {
         infoPane.setManaged(hasResults);
 
         stage.sizeToScene();
-    }
-
-    private void onMousePressed(MouseEvent e) {
-        dragX = stage.getX() - e.getScreenX();
-        dragY = stage.getY() - e.getScreenY();
-    }
-
-    private void onMouseDragged(MouseEvent e) {
-        stage.setX(e.getScreenX() + dragX);
-        stage.setY(e.getScreenY() + dragY);
-    }
-
-    private Node createResultItem(String title, String body) {
-        VBox item = new VBox();
-        item.getStyleClass().add("result-item");
-
-        Label titleLabel = new Label(title);
-        titleLabel.getStyleClass().add("result-title");
-        item.getChildren().add(titleLabel);
-
-        if (body != null && !body.isEmpty()) {
-            Label bodyLabel = new Label(body);
-            bodyLabel.getStyleClass().add("result-body");
-            item.getChildren().add(bodyLabel);
-        }
-
-        return item;
     }
 }

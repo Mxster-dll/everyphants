@@ -31,7 +31,7 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         String appId = null;
         String secretKey = null;
         try {
-            Path settingsPath = Paths.get("src/resources/settings.json");
+            Path settingsPath = Paths.get("src/resources/com/mxster/everyphants/data/settings.json");
             String content = Files.readString(settingsPath);
             appId = readJsonValue(content, "baidu-fanyi-appid");
             secretKey = readJsonValue(content, "baidu-fanyi-api-key");

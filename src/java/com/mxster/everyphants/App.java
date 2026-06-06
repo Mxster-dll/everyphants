@@ -23,7 +23,7 @@ public class App extends Application {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setTitle("万象");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/mxster/everyphants/view/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/mxster/everyphants/fxml/main.fxml"));
         Parent root = loader.load();
 
         MainController controller = loader.getController();
@@ -32,7 +32,7 @@ public class App extends Application {
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         scene.getStylesheets().add(
-                getClass().getResource("/com/mxster/everyphants/view/main.css").toExternalForm());
+                getClass().getResource("/com/mxster/everyphants/css/main.css").toExternalForm());
 
         stage.setScene(scene);
         stage.sizeToScene();

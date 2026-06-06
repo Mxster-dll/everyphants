@@ -27,7 +27,7 @@ public class AnswerBookPlugin extends ReactivePlugin<String> {
 
     public Result getAnswer(String query) {
         final Random random = new Random();
-        File file = new File("src/resources/答案之书.txt");
+        File file = new File("src/resources/com/mxster/everyphants/data/答案之书.txt");
 
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
