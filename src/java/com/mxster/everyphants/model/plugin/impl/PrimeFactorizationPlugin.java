@@ -52,7 +52,7 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
                             count++;
                         } else {
                             if (prev != null) {
-                                appendFactor(sb, prev, count);
+                                appendFactorTitle(sb, prev, count);
                                 sb.append(" × ");
                             }
                             prev = f;
@@ -60,11 +60,12 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
                         }
                     }
                     if (prev != null) {
-                        appendFactor(sb, prev, count);
+                        appendFactorTitle(sb, prev, count);
                     }
 
-                    String factorStr = sb.toString();
-                    result.finish(factorStr, key + " = " + factorStr);
+                    String titleStr = sb.toString();
+                    String displayStr = toDisplayFormat(titleStr);
+                    result.finish(titleStr, key + " = " + displayStr);
                 } catch (Exception e) {
                     result.finish("分解失败", key + " 分解失败");
                 }
@@ -75,11 +76,26 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
         });
     }
 
-    private static void appendFactor(StringBuilder sb, BigInteger prime, int exp) {
+    private static void appendFactorTitle(StringBuilder sb, BigInteger prime, int exp) {
         sb.append(prime);
         if (exp > 1) {
             sb.append(toSuperscript(exp));
         }
+    }
+
+    private static String toDisplayFormat(String title) {
+        return title
+                .replace(" × ", " * ")
+                .replace("\u2070", "^0")
+                .replace("\u00B9", "^1")
+                .replace("\u00B2", "^2")
+                .replace("\u00B3", "^3")
+                .replace("\u2074", "^4")
+                .replace("\u2075", "^5")
+                .replace("\u2076", "^6")
+                .replace("\u2077", "^7")
+                .replace("\u2078", "^8")
+                .replace("\u2079", "^9");
     }
 
     private static String toSuperscript(int n) {
@@ -98,7 +114,6 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
                 case '9' -> '\u2079';
                 default -> throw new IllegalArgumentException("未知的字符：" + c);
             };
-
             sb.append(indexBit);
         }
         return sb.toString();
