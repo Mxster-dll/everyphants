@@ -46,7 +46,7 @@ public class AnswerBookPlugin extends ReactivePlugin<String> {
                     line = reader.readLine();
                 }
 
-                return new Result(answer, "答案之书回应了你...", 1, null);
+                return new Result(answer, "答案之书回应了你...", 1.5, null);
             } catch (IOException e) {
                 String[] messages = {
                         "书页微微震颤，却未向此刻的风敞开……或许它还在倾听更迫切的问题。",
@@ -57,7 +57,7 @@ public class AnswerBookPlugin extends ReactivePlugin<String> {
                 };
 
                 int index = random.nextInt(messages.length);
-                return new Result(messages[index], "无法打开答案之书.txt", 1.5, null);
+                return new Result(messages[index], "无法打开答案之书.txt", 1.8, null);
             }
         });
     }
