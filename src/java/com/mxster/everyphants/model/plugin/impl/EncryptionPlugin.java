@@ -7,7 +7,15 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
     public EncryptionPlugin() {
         super("加密");
 
-        parsers.add(s -> s.matches("\\d+") ? null : s);
+        parsers.add(s -> {
+            if (s.matches("\\d+"))
+                return null;
+            for (int i = 0; i < s.length(); i++) {
+                if (Character.UnicodeBlock.of(s.charAt(i)) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS)
+                    return null;
+            }
+            return s;
+        });
 
         formatters.add(this::buildCaesar);
         formatters.add(this::buildFence);
