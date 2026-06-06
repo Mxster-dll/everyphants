@@ -35,6 +35,7 @@ public class MainController {
     private Stage stage;
     private WindowDragHandler dragHandler;
     private InputThrottle inputThrottle;
+    private List<Result> currentResults = List.of();
 
     public void init(Stage stage) {
         this.stage = stage;
@@ -47,14 +48,14 @@ public class MainController {
 
         for (var plugin : manager.getPlugins()) {
             if (plugin instanceof ReactivePlugin<?> rp) {
-                rp.addResultChangedListener(() -> doUpdate(manager));
+                rp.addResultChangedListener(() -> refreshFromCache(manager));
             }
         }
 
         AnimationTimer frameTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                doUpdate(manager);
+                refreshCurrentResults();
             }
         };
         frameTimer.start();
@@ -73,8 +74,9 @@ public class MainController {
 
     private void doUpdate(PluginManager manager) {
         String text = inputField.getText();
-        resultList.getChildren().clear();
         if (text == null || text.isEmpty()) {
+            currentResults = List.of();
+            renderResults();
             updateResultVisibility();
             return;
         }
@@ -90,17 +92,34 @@ public class MainController {
             }
         }
 
-        for (var r : results) {
+        currentResults = results;
+        renderResults();
+        updateResultVisibility();
+    }
+
+    private void refreshCurrentResults() {
+        boolean needsRender = false;
+        for (var r : currentResults) {
             if (r instanceof RefreshableResult rr && rr.getRefreshInterval() == 0) {
                 rr.refresh();
+                needsRender = true;
             }
         }
+        if (needsRender) {
+            renderResults();
+        }
+    }
 
-        results.stream()
+    private void refreshFromCache(PluginManager manager) {
+        doUpdate(manager);
+    }
+
+    private void renderResults() {
+        resultList.getChildren().clear();
+        currentResults.stream()
                 .sorted((a, b) -> Double.compare(b.getScore(), a.getScore()))
                 .forEach(r -> resultList.getChildren().add(
                         ResultItemFactory.create(r.getTitle(), r.getDisplayText())));
-
         updateResultVisibility();
     }
 
