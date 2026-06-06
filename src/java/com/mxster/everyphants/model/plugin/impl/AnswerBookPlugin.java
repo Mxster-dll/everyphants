@@ -57,7 +57,7 @@ public class AnswerBookPlugin extends ReactivePlugin<String> {
                 };
 
                 int index = random.nextInt(messages.length);
-                return new Result(messages[index], "无法打开答案之书.txt", 1, null);
+                return new Result(messages[index], "无法打开答案之书.txt", 1.5, null);
             }
         });
     }
