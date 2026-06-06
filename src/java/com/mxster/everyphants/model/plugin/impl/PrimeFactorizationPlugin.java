@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
@@ -13,7 +14,7 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
 
     private static final BigInteger TWO = BigInteger.TWO;
 
-    private final Map<BigInteger, Result> cache = new ConcurrentHashMap<>();
+    private final Map<BigInteger, RefreshableResult> cache = new ConcurrentHashMap<>();
 
     public PrimeFactorizationPlugin() {
         super("质因数分解");
@@ -36,29 +37,46 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
 
     public Result formatPrimeFactorization(BigInteger num) {
         return cache.computeIfAbsent(num, key -> {
-            Result result = new Result("计算中…", key + " 正在分解…", 1, null);
+            RefreshableResult result = new RefreshableResult("计算中.", key + " 正在分解.", 1, null);
+            result.withRefresh(0, () -> {
+                int dots = (int) ((System.currentTimeMillis() / 500) % 3) + 1;
+                String dotStr = ".".repeat(dots);
+                result.setTitle("计算中" + dotStr);
+                result.setDisplayText(key + " 正在分解" + dotStr);
+            });
 
             new Thread(() -> {
-                List<BigInteger> factors = primeFactorize(key);
+                try {
+                    List<BigInteger> factors = primeFactorize(key);
 
-                StringBuilder sb = new StringBuilder();
-                BigInteger prev = null;
-                int count = 0;
-                for (BigInteger f : factors) {
-                    if (f.equals(prev)) {
-                        count++;
-                    } else {
-                        if (prev != null) {
-                            appendFactor(sb, prev, count);
-                            sb.append(" × ");
+                    StringBuilder sb = new StringBuilder();
+                    BigInteger prev = null;
+                    int count = 0;
+                    for (BigInteger f : factors) {
+                        if (f.equals(prev)) {
+                            count++;
+                        } else {
+                            if (prev != null) {
+                                appendFactor(sb, prev, count);
+                                sb.append(" × ");
+                            }
+                            prev = f;
+                            count = 1;
                         }
-                        prev = f;
-                        count = 1;
                     }
-                }
-                appendFactor(sb, prev, count);
+                    if (prev != null) {
+                        appendFactor(sb, prev, count);
+                    }
 
-                result.setTitle(sb.toString());
+                    String factorStr = sb.toString();
+                    result.setRefreshInterval(-1);
+                    result.setTitle(factorStr);
+                    result.setDisplayText(key + " = " + factorStr);
+                } catch (Exception e) {
+                    result.setRefreshInterval(-1);
+                    result.setTitle("分解失败");
+                    result.setDisplayText(key + " 分解失败");
+                }
                 fireResultChanged();
             }, "PrimeFactorDivider").start();
 
