@@ -57,6 +57,7 @@ public abstract class ReactivePlugin<T> extends Plugin {
         T selected = nonNullResults.get(0);
         return formatters.stream()
                 .map(formatter -> formatter.apply(selected))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 }

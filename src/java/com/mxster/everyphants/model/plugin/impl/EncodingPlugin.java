@@ -32,7 +32,7 @@ public class EncodingPlugin extends ReactivePlugin<String> {
 
     public Result buildBase64(String s) {
         String encoded = Base64.getEncoder().encodeToString(s.getBytes(StandardCharsets.UTF_8));
-        return new Result(encoded, "Base64", 0.1, null);
+        return new Result(encoded, "Base64编码", 0.1, null);
     }
 
     public Result buildUtf8Bytes(String s) {
