@@ -31,6 +31,7 @@ public class App extends Application {
 
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
+        scene.addEventFilter(javafx.scene.input.ContextMenuEvent.CONTEXT_MENU_REQUESTED, javafx.event.Event::consume);
         scene.getStylesheets().add(
                 getClass().getResource("/com/mxster/everyphants/css/main.css").toExternalForm());
 

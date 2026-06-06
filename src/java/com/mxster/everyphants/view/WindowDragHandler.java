@@ -13,11 +13,17 @@ public class WindowDragHandler {
     }
 
     public void onPressed(MouseEvent e) {
+        if (!e.isPrimaryButtonDown()) {
+            return;
+        }
         dragX = stage.getX() - e.getScreenX();
         dragY = stage.getY() - e.getScreenY();
     }
 
     public void onDragged(MouseEvent e) {
+        if (!e.isPrimaryButtonDown()) {
+            return;
+        }
         stage.setX(e.getScreenX() + dragX);
         stage.setY(e.getScreenY() + dragY);
     }
