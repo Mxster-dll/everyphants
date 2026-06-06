@@ -8,6 +8,7 @@ import com.mxster.everyphants.model.plugin.core.Plugin;
 import com.mxster.everyphants.model.plugin.impl.AnswerBookPlugin;
 import com.mxster.everyphants.model.plugin.impl.BaseConversionPlugin;
 import com.mxster.everyphants.model.plugin.impl.ColorPlugin;
+import com.mxster.everyphants.model.plugin.impl.EncodingPlugin;
 import com.mxster.everyphants.model.plugin.impl.EncryptionPlugin;
 import com.mxster.everyphants.model.plugin.impl.PrimeFactorizationPlugin;
 import com.mxster.everyphants.model.plugin.impl.RandomPlugin;
@@ -19,6 +20,7 @@ public class PluginManager {
             new BaseConversionPlugin(),
             new ColorPlugin(),
             new EncryptionPlugin(),
+            new EncodingPlugin(),
             new PrimeFactorizationPlugin(),
             new RandomPlugin(),
             new TranslatePlugin(),
