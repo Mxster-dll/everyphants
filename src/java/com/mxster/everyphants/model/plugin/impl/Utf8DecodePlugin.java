@@ -39,21 +39,18 @@ public class Utf8DecodePlugin extends ReactivePlugin<String> {
     }
 
     public Result buildUtf8Decode(String s) {
-        if (isGarbled(s)) {
-            return null;
-        }
-        return new Result(s, "UTF-8解码", 0.1, null);
-    }
-
-    private static boolean isGarbled(String s) {
         int bad = 0;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (c == 0xFFFD)
-                return true;
-            if (c < 0x20 && c != '\t' && c != '\n' && c != '\r')
+            if (c == 0xFFFD || c == 0xFFFE || c == 0xFFFF || c == 0x0000)
+                return null;
+            if (Character.isISOControl(c) && c != '\t' && c != '\n' && c != '\r')
                 bad++;
+            if (Character.isSurrogate(c))
+                return null;
         }
-        return bad > s.length() * 0.25;
+        if (bad > s.length() * 0.25)
+            return null;
+        return new Result(s, "UTF-8解码", 0.1, null);
     }
 }
