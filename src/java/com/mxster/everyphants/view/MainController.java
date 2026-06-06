@@ -1,6 +1,10 @@
 package com.mxster.everyphants.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mxster.everyphants.model.PluginManager;
+import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 import com.mxster.everyphants.model.plugin.impl.TranslatePlugin;
@@ -102,17 +106,19 @@ public class MainController {
         }
 
         String trimmed = text.trim();
+
+        List<Result> results = new ArrayList<>();
         for (var plugin : manager.getPlugins()) {
             if (plugin instanceof ReactivePlugin<?> rp) {
-                for (var r : rp.query(trimmed)) {
-                    resultList.getChildren().add(createResultItem(r.title, r.displayText));
-                }
+                results.addAll(rp.query(trimmed));
             } else if (plugin instanceof ProactivePlugin<?> pp) {
-                for (var r : pp.query()) {
-                    resultList.getChildren().add(createResultItem(r.title, r.displayText));
-                }
+                results.addAll(pp.query());
             }
         }
+
+        results.stream()
+                .sorted((a, b) -> Double.compare(b.score, a.score))
+                .forEach(r -> resultList.getChildren().add(createResultItem(r.title, r.displayText)));
 
         updateResultVisibility();
     }
