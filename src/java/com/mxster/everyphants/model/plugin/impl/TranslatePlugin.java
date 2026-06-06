@@ -52,7 +52,7 @@ public class TranslatePlugin extends ReactivePlugin<String> {
     private volatile String lastTranslatedText;
 
     public TranslatePlugin() {
-        super("翻译", null);
+        super("翻译");
 
         parsers.add(this::parseTranslateCommand);
 

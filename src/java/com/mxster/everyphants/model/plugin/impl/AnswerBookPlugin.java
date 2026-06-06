@@ -13,7 +13,7 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class AnswerBookPlugin extends ReactivePlugin<String> {
     public AnswerBookPlugin() {
-        super("答案之书", null);
+        super("答案之书");
 
         parsers.add(this::parseQuestion);
         formatters.add(this::getAnswer);

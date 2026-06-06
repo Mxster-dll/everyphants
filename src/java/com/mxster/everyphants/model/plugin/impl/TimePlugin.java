@@ -10,7 +10,7 @@ public class TimePlugin extends ProactivePlugin<Date> implements Refreshable {
     protected int refreshInterval = 1000;
 
     public TimePlugin() {
-        super("时间", null);
+        super("时间");
 
         formatters.add(this::showTime);
     }

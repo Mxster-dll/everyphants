@@ -13,6 +13,10 @@ public abstract class ReactivePlugin<T> extends Plugin {
     protected List<Function<String, T>> parsers = new ArrayList<>();
     protected List<Function<T, Result>> formatters = new ArrayList<>();
 
+    public ReactivePlugin(String name) {
+        super(name);
+    }
+
     public ReactivePlugin(String name, String iconPath) {
         super(name, iconPath);
     }

@@ -10,6 +10,10 @@ import com.mxster.everyphants.model.Result;
 public abstract class ProactivePlugin<T> extends Plugin {
     protected List<Function<T, Result>> formatters = new ArrayList<>();
 
+    public ProactivePlugin(String name) {
+        super(name);
+    }
+
     public ProactivePlugin(String name, String iconPath) {
         super(name, iconPath);
     }

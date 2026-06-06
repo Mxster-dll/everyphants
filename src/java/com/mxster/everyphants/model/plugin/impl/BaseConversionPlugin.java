@@ -8,7 +8,7 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 public class BaseConversionPlugin extends ReactivePlugin<BigInteger> {
 
     public BaseConversionPlugin() {
-        super("进制转换", null);
+        super("进制转换");
 
         parsers.add(this::parseFromDec);
         parsers.add(this::parseFromBin);

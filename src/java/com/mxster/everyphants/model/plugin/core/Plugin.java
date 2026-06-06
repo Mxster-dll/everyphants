@@ -4,6 +4,10 @@ public abstract class Plugin {
     protected String name;
     protected String iconPath;
 
+    public Plugin(String name) {
+        this.name = name;
+    }
+
     public Plugin(String name, String iconPath) {
         this.name = name;
         this.iconPath = iconPath;

@@ -8,7 +8,7 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class RandomPlugin extends ReactivePlugin<BigInteger> {
     public RandomPlugin() {
-        super("生成随机数", null);
+        super("生成随机数");
 
         parsers.add(this::parseToUpperBound);
         formatters.add(this::rand);

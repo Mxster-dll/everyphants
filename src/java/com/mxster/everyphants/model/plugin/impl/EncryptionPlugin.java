@@ -7,7 +7,7 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class EncryptionPlugin extends ReactivePlugin<String> {
     public EncryptionPlugin() {
-        super("加密", null);
+        super("加密");
 
         parsers.add(Function.identity());
 
