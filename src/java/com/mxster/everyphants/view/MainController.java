@@ -58,7 +58,6 @@ public class MainController {
             }
         }
 
-        // 每帧驱动 interval=0 的 RefreshableResult 刷新
         AnimationTimer frameTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {

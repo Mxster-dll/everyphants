@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.mxster.everyphants.model.RefreshableResult;
+import com.mxster.everyphants.model.LoadingResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
@@ -37,13 +38,7 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
 
     public Result formatPrimeFactorization(BigInteger num) {
         return cache.computeIfAbsent(num, key -> {
-            RefreshableResult result = new RefreshableResult("计算中.", key + " 正在分解.", 1, null);
-            result.withRefresh(0, () -> {
-                int dots = (int) ((System.currentTimeMillis() / 500) % 3) + 1;
-                String dotStr = ".".repeat(dots);
-                result.setTitle("计算中" + dotStr);
-                result.setDisplayText(key + " 正在分解" + dotStr);
-            });
+            LoadingResult result = new LoadingResult("计算中", key + " 正在分解", 1, null);
 
             new Thread(() -> {
                 try {
@@ -69,13 +64,9 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
                     }
 
                     String factorStr = sb.toString();
-                    result.setRefreshInterval(-1);
-                    result.setTitle(factorStr);
-                    result.setDisplayText(key + " = " + factorStr);
+                    result.finish(factorStr, key + " = " + factorStr);
                 } catch (Exception e) {
-                    result.setRefreshInterval(-1);
-                    result.setTitle("分解失败");
-                    result.setDisplayText(key + " 分解失败");
+                    result.finish("分解失败", key + " 分解失败");
                 }
                 fireResultChanged();
             }, "PrimeFactorDivider").start();

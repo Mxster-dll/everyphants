@@ -5,26 +5,14 @@ import java.util.Date;
 import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
-import com.mxster.everyphants.model.plugin.core.Refreshable;
 
-public class TimePlugin extends ProactivePlugin<Date> implements Refreshable {
-    private int refreshInterval = 1000;
+public class TimePlugin extends ProactivePlugin<Date> {
     private RefreshableResult cachedResult;
 
     public TimePlugin() {
         super("时间");
 
         formatters.add(this::showTime);
-    }
-
-    @Override
-    public int getRefreshInterval() {
-        return refreshInterval;
-    }
-
-    @Override
-    public void setRefreshInterval(int millis) {
-        this.refreshInterval = millis;
     }
 
     @Override

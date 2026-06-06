@@ -22,6 +22,14 @@ public class RefreshableResult extends Result implements Refreshable {
         }
     }
 
+    public void stopRefreshing() {
+        this.refreshInterval = -1;
+    }
+
+    public boolean isRefreshing() {
+        return refreshInterval == 0 && refreshAction != null;
+    }
+
     @Override
     public int getRefreshInterval() {
         return refreshInterval;
