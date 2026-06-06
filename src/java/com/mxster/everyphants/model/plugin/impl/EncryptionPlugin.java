@@ -45,7 +45,7 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
     }
 
     public Result buildFence(String s) {
-        return new Result(fence(s), "栅栏加密", 0.5, null);
+        return new Result(fence(s), "栅栏加密(2)", 0.5, null);
     }
 
 }
