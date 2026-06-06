@@ -3,6 +3,8 @@ package com.mxster.everyphants.view;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -18,11 +20,13 @@ public final class ResultItemFactory {
 
         Label titleLabel = new Label(title);
         titleLabel.getStyleClass().add("result-title");
+        titleLabel.setOnMouseClicked(e -> copyToClipboard(titleLabel.getText()));
         item.getChildren().add(titleLabel);
 
         if (body != null && !body.isEmpty()) {
             Label bodyLabel = new Label(body);
             bodyLabel.getStyleClass().add("result-body");
+            bodyLabel.setOnMouseClicked(e -> copyToClipboard(bodyLabel.getText()));
             item.getChildren().add(bodyLabel);
         }
 
@@ -65,8 +69,15 @@ public final class ResultItemFactory {
             } else {
                 Label bodyLabel = new Label(body);
                 bodyLabel.getStyleClass().add("result-body");
+                bodyLabel.setOnMouseClicked(e -> copyToClipboard(bodyLabel.getText()));
                 item.getChildren().add(bodyLabel);
             }
         }
+    }
+
+    private static void copyToClipboard(String text) {
+        ClipboardContent content = new ClipboardContent();
+        content.putString(text);
+        Clipboard.getSystemClipboard().setContent(content);
     }
 }
