@@ -19,7 +19,7 @@ public class CountdownPlugin extends ProactivePlugin<Void> {
     private final Map<CountdownItem, RefreshableResult> cache = new ConcurrentHashMap<>();
 
     public CountdownPlugin() {
-        super("倒计时", "时间.png");
+        super("倒计时", "日历.png");
 
         items = List.of(
                 new CountdownItem("2026年高考", LocalDateTime.of(2026, 6, 7, 9, 0), "高考加油！"),

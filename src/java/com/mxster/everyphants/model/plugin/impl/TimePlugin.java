@@ -10,7 +10,7 @@ public class TimePlugin extends ProactivePlugin<Date> {
     private RefreshableResult cachedResult;
 
     public TimePlugin() {
-        super("时间", "日历.png");
+        super("时间", "时间.png");
 
         formatters.add(this::showTime);
     }
