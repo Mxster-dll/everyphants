@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 
 public class EncryptionPlugin extends ReactivePlugin<String> {
     public EncryptionPlugin() {
-        super("加密");
+        super("加密", "加密.png");
 
         parsers.add(s -> {
             if (s.matches("\\d+"))

@@ -10,7 +10,7 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 public class EncodingPlugin extends ReactivePlugin<String> {
 
     public EncodingPlugin() {
-        super("编码");
+        super("编码", "编码.png");
 
         parsers.add(s -> s.matches("\\d+") ? null : s);
 

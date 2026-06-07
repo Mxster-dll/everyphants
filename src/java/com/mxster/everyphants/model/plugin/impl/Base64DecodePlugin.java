@@ -9,7 +9,7 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 public class Base64DecodePlugin extends ReactivePlugin<String> {
 
     public Base64DecodePlugin() {
-        super("Base64解码");
+        super("Base64解码", "解码.png");
 
         parsers.add(this::parseBase64);
 

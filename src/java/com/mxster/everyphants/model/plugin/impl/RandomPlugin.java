@@ -14,7 +14,7 @@ public class RandomPlugin extends ReactivePlugin<BigInteger> {
     private final Map<BigInteger, RefreshableResult> cache = new ConcurrentHashMap<>();
 
     public RandomPlugin() {
-        super("生成随机数");
+        super("生成随机数", "更改.png");
 
         parsers.add(this::parseToUpperBound);
         formatters.add(this::rand);

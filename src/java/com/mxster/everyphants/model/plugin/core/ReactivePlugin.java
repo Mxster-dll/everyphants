@@ -55,9 +55,20 @@ public abstract class ReactivePlugin<T> extends Plugin {
         }
 
         T selected = nonNullResults.get(0);
-        return formatters.stream()
+        List<Result> results = formatters.stream()
                 .map(formatter -> formatter.apply(selected))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+
+        // 自动为所有结果附上插件的图标路径
+        if (iconFile != null && !iconFile.isEmpty()) {
+            for (Result r : results) {
+                if (r.getIconPath() == null || r.getIconPath().isEmpty()) {
+                    r.setIconPath(iconFile);
+                }
+            }
+        }
+
+        return results;
     }
 }

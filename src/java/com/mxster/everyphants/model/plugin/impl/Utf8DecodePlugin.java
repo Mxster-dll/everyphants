@@ -8,7 +8,7 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 public class Utf8DecodePlugin extends ReactivePlugin<String> {
 
     public Utf8DecodePlugin() {
-        super("UTF-8解码");
+        super("UTF-8解码", "解码.png");
 
         parsers.add(this::parseHexBytes);
 

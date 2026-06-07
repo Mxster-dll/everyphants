@@ -16,7 +16,7 @@ public class NumberToChinesePlugin extends ReactivePlugin<BigInteger> {
     private static final String[] BIG_UNITS_LOWER = { "", "万", "亿", "兆", "京", "垓", "秭", "穰", "沟", "涧", "正", "载", "极" };
 
     public NumberToChinesePlugin() {
-        super("数字大小写");
+        super("数字大小写", "汉字.png");
 
         parsers.add(this::parseNumber);
         formatters.add(this::toChinese);

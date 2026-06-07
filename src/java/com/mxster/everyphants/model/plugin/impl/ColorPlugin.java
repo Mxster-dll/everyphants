@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 
 public class ColorPlugin extends ReactivePlugin<Color> {
     public ColorPlugin() {
-        super("颜色");
+        super("颜色", "颜色.png");
 
         parsers.add(this::parseWebColor);
         formatters.add(this::hexColorText);

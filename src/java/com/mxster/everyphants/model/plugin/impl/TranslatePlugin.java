@@ -56,7 +56,7 @@ public class TranslatePlugin extends ReactivePlugin<String> {
     private String lastDisplay = null;
 
     public TranslatePlugin() {
-        super("翻译");
+        super("翻译", "翻译.png");
 
         parsers.add(s -> {
             if (s == null || s.isEmpty() || s.matches("\\d+"))

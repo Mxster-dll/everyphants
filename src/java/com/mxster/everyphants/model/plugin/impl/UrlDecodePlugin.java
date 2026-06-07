@@ -9,7 +9,7 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 public class UrlDecodePlugin extends ReactivePlugin<String> {
 
     public UrlDecodePlugin() {
-        super("URL解码");
+        super("URL解码", "解码.png");
 
         parsers.add(this::parseUrlEncoded);
 

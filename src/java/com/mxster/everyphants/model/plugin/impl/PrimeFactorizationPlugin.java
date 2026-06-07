@@ -18,7 +18,7 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
     private final Map<BigInteger, RefreshableResult> cache = new ConcurrentHashMap<>();
 
     public PrimeFactorizationPlugin() {
-        super("质因数分解");
+        super("质因数分解", "计算.png");
 
         parsers.add(this::parseToInteger);
         formatters.add(this::formatPrimeFactorization);
