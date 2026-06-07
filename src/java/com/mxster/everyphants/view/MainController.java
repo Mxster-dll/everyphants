@@ -20,7 +20,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -38,16 +37,19 @@ public class MainController {
     @FXML
     private Separator divider2;
     @FXML
-    private Pane infoPane;
+    private StackPane infoBar;
+    @FXML
+    private Label brandLabel;
+    @FXML
+    private Label feedbackLabel;
+    @FXML
+    private Label countLabel;
 
     private Stage stage;
     private WindowDragHandler dragHandler;
     private InputThrottle inputThrottle;
     private List<Result> currentResults = List.of();
     private final Map<Result, Node> nodeCache = new LinkedHashMap<>();
-    private Label feedbackLabel;
-    private Label countLabel;
-    private StackPane infoBar;
 
     public void init(Stage stage) {
         this.stage = stage;
@@ -74,31 +76,8 @@ public class MainController {
 
         inputThrottle = new InputThrottle(() -> doUpdate(manager));
 
-        // ── 品牌标识 "万象"（左下角）──
-        Label brandLabel = new Label("万象");
-        brandLabel.getStyleClass().add("brand-label");
-
-        // ── 反馈标签（正中间）──
-        feedbackLabel = new Label();
+        // 反馈标签初始不可见（FXML 中已定义，此处仅设置初始状态）
         feedbackLabel.setOpacity(0);
-        feedbackLabel.getStyleClass().add("feedback-label");
-
-        // ── 结果计数（右下角）──
-        countLabel = new Label("0");
-        countLabel.getStyleClass().add("count-label");
-
-        // 使用 StackPane 实现左-中-右独立定位
-        infoBar = new StackPane();
-        infoBar.getStyleClass().add("info-bar");
-        StackPane.setAlignment(brandLabel, javafx.geometry.Pos.CENTER_LEFT);
-        StackPane.setAlignment(feedbackLabel, javafx.geometry.Pos.CENTER);
-        StackPane.setAlignment(countLabel, javafx.geometry.Pos.CENTER_RIGHT);
-        infoBar.getChildren().addAll(brandLabel, feedbackLabel, countLabel);
-
-        VBox contentBox = (VBox) rootPane.getChildren().get(0);
-
-        int infoIdx = contentBox.getChildren().indexOf(infoPane);
-        contentBox.getChildren().set(infoIdx, infoBar);
 
         ResultItemFactory.onCopyFeedback = text -> {
             feedbackLabel.setText("已复制: " + text);
@@ -124,6 +103,8 @@ public class MainController {
             }
             inputThrottle.trigger();
         });
+
+        VBox contentBox = (VBox) rootPane.getChildren().get(0);
 
         Label clearBtn = new Label("✕");
         clearBtn.setStyle(

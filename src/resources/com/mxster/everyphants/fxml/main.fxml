@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -13,14 +13,20 @@
            styleClass="root-pane">
   <VBox spacing="0" styleClass="content-box">
     <TextField fx:id="inputField"
-        styleClass="input-field"
-        promptText="输入内容…" />
+                styleClass="input-field"
+                promptText="输入内容…" />
     <Separator fx:id="divider1" styleClass="divider"/>
     <VBox fx:id="resultList"
-        styleClass="result-list"
-        VBox.vgrow="ALWAYS" />
+                styleClass="result-list"
+                VBox.vgrow="ALWAYS" />
     <Separator fx:id="divider2" styleClass="divider"/>
-    <Pane fx:id="infoPane"
-        styleClass="info-pane" />
+    <StackPane fx:id="infoBar" styleClass="info-bar">
+      <Label fx:id="brandLabel" text="万象" styleClass="brand-label"
+                      StackPane.alignment="CENTER_LEFT" />
+      <Label fx:id="feedbackLabel" styleClass="feedback-label"
+                      StackPane.alignment="CENTER" />
+      <Label fx:id="countLabel" text="0" styleClass="count-label"
+                      StackPane.alignment="CENTER_RIGHT" />
+    </StackPane>
   </VBox>
 </StackPane>
