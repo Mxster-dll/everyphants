@@ -109,6 +109,7 @@ public class MainController {
             SequentialTransition seq = new SequentialTransition(feedbackLabel, fadeIn, hold, fadeOut);
             seq.play();
         };
+        ResultItemFactory.installCopyFeedback();
 
         inputField.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.trim().equals(oldVal.trim())) {

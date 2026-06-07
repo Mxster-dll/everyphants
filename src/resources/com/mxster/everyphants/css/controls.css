@@ -22,6 +22,11 @@
     -fx-background-color: transparent;
 }
 
+/* ── 结果卡片容器 ── */
+.result-wrapper {
+    -fx-background-color: transparent;
+}
+
 /* ── 结果项 ── */
 .result-item {
     -fx-pref-height: 54;
@@ -45,6 +50,33 @@
     -fx-font-size: 12px;
     -fx-text-fill: #a0a0a0;
     -fx-font-family: "Microsoft YaHei";
+}
+
+/* ── 彩色背景层 ── */
+.result-color-bg {
+    -fx-background-radius: 8;
+    -fx-max-height: infinity;
+}
+
+/* ── 图标 + 文字横排 ── */
+.result-icon-row {
+    -fx-background-color: transparent;
+}
+
+.result-icon {
+    -fx-background-color: transparent;
+}
+
+.result-text-group {
+    -fx-background-color: transparent;
+    -fx-spacing: 2;
+    -fx-alignment: CENTER-LEFT;
+}
+
+/* ── 悬停蓝色高亮条 ── */
+.result-bar {
+    -fx-background-color: #4cc2ff;
+    -fx-background-radius: 3;
 }
 
 /* ── 底部信息栏 ── */
