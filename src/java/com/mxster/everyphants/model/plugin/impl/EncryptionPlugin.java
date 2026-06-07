@@ -70,8 +70,9 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
                 break;
             }
         }
-        if (!hasNonEnglish)
+        if (!hasNonEnglish) {
             return false;
+        }
         try {
             Color.web(s);
             return true;
@@ -81,12 +82,11 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
     }
 
     public static String morseCode(String s) {
-        String ans = "";
-        int l = s.length();
-        s = s.toUpperCase();
+        StringBuilder sb = new StringBuilder();
+        String upper = s.toUpperCase();
 
-        for (int i = 0; i < l; i++) {
-            ans += switch (s.charAt(i)) {
+        for (int i = 0; i < upper.length(); i++) {
+            String code = switch (upper.charAt(i)) {
                 case 'A' -> ".-";
                 case 'B' -> "-...";
                 case 'C' -> "-.-.";
@@ -101,7 +101,7 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
                 case 'L' -> ".-..";
                 case 'M' -> "--";
                 case 'N' -> "-.";
-                case 'O' -> "--";
+                case 'O' -> "---";
                 case 'P' -> ".--.";
                 case 'Q' -> "--.-";
                 case 'R' -> ".-.";
@@ -115,11 +115,11 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
                 case 'Z' -> "--..";
                 case '0' -> "-----";
                 case '1' -> ".----";
-                case '2' -> "...--";
-                case '3' -> "....-";
-                case '4' -> ".....";
-                case '5' -> "-....";
-                case '6' -> "--...";
+                case '2' -> "..---";
+                case '3' -> "...--";
+                case '4' -> "....-";
+                case '5' -> ".....";
+                case '6' -> "-....";
                 case '7' -> "--...";
                 case '8' -> "---..";
                 case '9' -> "----.";
@@ -140,11 +140,14 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
                 case '$' -> "...-..-";
                 case '&' -> "....";
                 case '@' -> ".--.-.";
-                default -> null;
-            } + "  ";
+                default -> "";
+            };
+            if (!code.isEmpty()) {
+                sb.append(code).append("  ");
+            }
         }
 
-        return ans;
+        return sb.toString().trim();
     }
 
     public Result buildMorseCode(String s) {

@@ -61,7 +61,6 @@ public class MainController {
 
         PluginManager manager = new PluginManager();
 
-        // 持久插件：启动时注册一次，之后不再重新查询
         persistentResults = new ArrayList<>();
         for (var plugin : manager.getPlugins()) {
             if (plugin instanceof ProactivePlugin) {
@@ -82,7 +81,6 @@ public class MainController {
 
         inputThrottle = new InputThrottle(() -> doUpdate(manager));
 
-        // 反馈标签初始不可见（FXML 中已定义，此处仅设置初始状态）
         feedbackLabel.setOpacity(0);
 
         ResultItemFactory.onCopyFeedback = text -> {

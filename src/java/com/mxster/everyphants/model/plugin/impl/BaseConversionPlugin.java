@@ -30,7 +30,6 @@ public class BaseConversionPlugin extends ReactivePlugin<BigInteger> {
         return result;
     }
 
-    // 每添加 space 个字符，就加一个空格（最后一段不添加）
     private static String addSpacesFromLow(String text, int space) {
         if (text == null || text.isEmpty()) {
             return text;

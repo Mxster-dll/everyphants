@@ -23,15 +23,19 @@ public class Base64DecodePlugin extends ReactivePlugin<String> {
         int bad = 0;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (c == 0xFFFD || c == 0xFFFE || c == 0xFFFF || c == 0x0000)
+            if (c == 0xFFFD || c == 0xFFFE || c == 0xFFFF || c == 0x0000) {
                 return null;
-            if (Character.isISOControl(c) && c != '\t' && c != '\n' && c != '\r')
+            }
+            if (Character.isISOControl(c) && c != '\t' && c != '\n' && c != '\r') {
                 bad++;
-            if (Character.isSurrogate(c))
+            }
+            if (Character.isSurrogate(c)) {
                 return null;
+            }
         }
-        if (bad > s.length() * 0.25)
+        if (bad > s.length() * 0.25) {
             return null;
+        }
         return new Result(s, "Base64解码", 0.1);
     }
 }

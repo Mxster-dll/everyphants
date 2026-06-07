@@ -45,7 +45,6 @@ public class ResultItem extends StackPane {
         titleLabel.setOnMouseClicked(e -> copyToClipboard(titleLabel.getText()));
         bodyLabel.setOnMouseClicked(e -> copyToClipboard(bodyLabel.getText()));
 
-        // 高亮条
         bar.setMaxHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
         javafx.scene.layout.StackPane.setAlignment(bar, javafx.geometry.Pos.CENTER_LEFT);
 

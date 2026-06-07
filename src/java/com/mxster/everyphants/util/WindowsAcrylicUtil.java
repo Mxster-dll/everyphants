@@ -12,9 +12,6 @@ import com.sun.jna.win32.W32APIOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Windows 窗口圆角裁剪工具。
- */
 public final class WindowsAcrylicUtil {
 
     private WindowsAcrylicUtil() {

@@ -24,8 +24,5 @@ public abstract class ProactivePlugin extends Plugin {
         return cachedResults;
     }
 
-    /**
-     * 构建结果列表。仅调用一次，结果会被缓存。
-     */
     protected abstract List<Result> buildResult();
 }

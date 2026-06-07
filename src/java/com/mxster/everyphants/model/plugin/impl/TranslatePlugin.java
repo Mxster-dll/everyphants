@@ -63,10 +63,12 @@ public class TranslatePlugin extends ReactivePlugin<String> {
 
     @Override
     public String parse(String s) {
-        if (s == null || s.isEmpty() || s.matches("\\d+"))
+        if (s == null || s.isEmpty() || s.matches("\\d+")) {
             return null;
-        if (isNonEnglishColor(s))
+        }
+        if (isNonEnglishColor(s)) {
             return null;
+        }
 
         boolean hasLetterOrHan = false;
         for (int i = 0; i < s.length(); i++) {
@@ -128,15 +130,18 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         boolean hasEn = false, hasZh = false;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            if (isCJK(c))
+            if (isCJK(c)) {
                 hasZh = true;
-            else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+            } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
                 hasEn = true;
-            if (hasEn && hasZh)
+            }
+            if (hasEn && hasZh) {
                 return LangType.MIXED;
+            }
         }
-        if (hasZh)
+        if (hasZh) {
             return LangType.PURE_ZH;
+        }
         return LangType.PURE_EN;
     }
 
@@ -156,8 +161,9 @@ public class TranslatePlugin extends ReactivePlugin<String> {
                 break;
             }
         }
-        if (!hasNonEnglish)
+        if (!hasNonEnglish) {
             return false;
+        }
         try {
             Color.web(s);
             return true;
@@ -171,8 +177,9 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         StringBuilder result = new StringBuilder();
 
         for (String seg : segments) {
-            if (seg.isEmpty())
+            if (seg.isEmpty()) {
                 continue;
+            }
             LangType segLang = detectLang(seg);
             if (segLang == LangType.PURE_ZH) {
                 if (targetLang.equals("zh")) {
@@ -194,8 +201,9 @@ public class TranslatePlugin extends ReactivePlugin<String> {
 
     private static List<String> splitByLang(String text) {
         List<String> segments = new ArrayList<>();
-        if (text.isEmpty())
+        if (text.isEmpty()) {
             return segments;
+        }
 
         StringBuilder current = new StringBuilder();
         Boolean currentIsZh = null;

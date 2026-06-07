@@ -34,13 +34,7 @@ public class CountdownPlugin extends ProactivePlugin {
             results.add(r);
         }
 
-        if (iconFile != null && !iconFile.isEmpty()) {
-            for (Result r : results) {
-                if (r.getIconPath() == null || r.getIconPath().isEmpty()) {
-                    r.setIconPath(iconFile);
-                }
-            }
-        }
+        applyPluginIcon(results);
 
         return results;
     }
