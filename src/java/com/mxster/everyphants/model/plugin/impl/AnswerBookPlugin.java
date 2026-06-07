@@ -18,7 +18,7 @@ public class AnswerBookPlugin extends ReactivePlugin<String> {
     private final Map<String, Result> cache = new ConcurrentHashMap<>();
 
     public AnswerBookPlugin() {
-        super("答案之书", "提问.png");
+        super("答案之书", "书.png");
 
         parsers.add(this::parseQuestion);
         formatters.add(this::getAnswer);
