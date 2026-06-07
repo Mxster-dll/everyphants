@@ -27,17 +27,22 @@ public final class ResultItemFactory {
     }
 
     public static Node create(String title, String body) {
-        return create(title, body, null);
+        return create(title, body, null, null);
+    }
+
+    public static Node create(String title, String body, String iconPath) {
+        return create(title, body, iconPath, null);
     }
 
     /**
      * 创建结果条目。
      *
-     * @param title    标题
-     * @param body     正文（可为 null）
-     * @param iconPath 图标文件名（如 "更改.png"），为 null 则不显示图标
+     * @param title           标题
+     * @param body            正文（可为 null）
+     * @param iconPath        图标文件名，为 null 则不显示图标
+     * @param backgroundColor CSS 背景色（如 "#ff0000"），为 null 则无彩色背景
      */
-    public static Node create(String title, String body, String iconPath) {
+    public static Node create(String title, String body, String iconPath, String backgroundColor) {
         VBox item = new VBox();
         item.getStyleClass().add("result-item");
 
@@ -84,7 +89,20 @@ public final class ResultItemFactory {
         bar.setVisible(false);
         bar.setManaged(false);
 
-        StackPane wrapper = new StackPane(item, bar);
+        StackPane wrapper;
+        if (backgroundColor != null && !backgroundColor.isEmpty()) {
+            // 有色卡片：在最底层加一个圆角背景 Region
+            Region bg = new Region();
+            bg.setStyle("-fx-background-color: " + backgroundColor
+                    + "; -fx-background-radius: 8;");
+            bg.setMaxHeight(Region.USE_PREF_SIZE);
+            wrapper = new StackPane(bg, item, bar);
+            // 让背景填满 wrapper
+            bg.prefWidthProperty().bind(wrapper.widthProperty());
+            bg.prefHeightProperty().bind(wrapper.heightProperty());
+        } else {
+            wrapper = new StackPane(item, bar);
+        }
         StackPane.setAlignment(bar, Pos.CENTER_LEFT);
 
         wrapper.hoverProperty().addListener((obs, oldVal, newVal) -> {

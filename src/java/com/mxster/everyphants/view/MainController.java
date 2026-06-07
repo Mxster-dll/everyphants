@@ -188,7 +188,8 @@ public class MainController {
         for (Result r : sorted) {
             Node node = nodeCache.get(r);
             if (node == null) {
-                node = ResultItemFactory.create(r.getTitle(), r.getDisplayText(), r.getIconPath());
+                node = ResultItemFactory.create(r.getTitle(), r.getDisplayText(),
+                        r.getIconPath(), r.getBackgroundColor());
                 nodeCache.put(r, node);
             } else {
                 ResultItemFactory.updateText(node, r.getTitle(), r.getDisplayText());
