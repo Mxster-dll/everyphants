@@ -9,6 +9,7 @@ import com.mxster.everyphants.model.plugin.impl.AnswerBookPlugin;
 import com.mxster.everyphants.model.plugin.impl.Base64DecodePlugin;
 import com.mxster.everyphants.model.plugin.impl.BaseConversionPlugin;
 import com.mxster.everyphants.model.plugin.impl.ColorPlugin;
+import com.mxster.everyphants.model.plugin.impl.CountdownPlugin;
 import com.mxster.everyphants.model.plugin.impl.EncodingPlugin;
 import com.mxster.everyphants.model.plugin.impl.EncryptionPlugin;
 import com.mxster.everyphants.model.plugin.impl.NumberToChinesePlugin;
@@ -33,7 +34,8 @@ public class PluginManager {
             new Base64DecodePlugin(),
             new Utf8DecodePlugin(),
             new AnswerBookPlugin(),
-            new TimePlugin()));
+            new TimePlugin(),
+            new CountdownPlugin()));
 
     public List<Plugin> getPlugins() {
         return plugins;
