@@ -11,11 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-/**
- * 万象 Everyphants
- */
 public class App extends Application {
-
     @Override
     public void start(Stage stage) throws Exception {
         Application.setUserAgentStylesheet("fluent-light.css");

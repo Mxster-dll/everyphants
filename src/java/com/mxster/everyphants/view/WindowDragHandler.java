@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 
 public class WindowDragHandler {
     private final Stage stage;
+
     private double dragX;
     private double dragY;
 
