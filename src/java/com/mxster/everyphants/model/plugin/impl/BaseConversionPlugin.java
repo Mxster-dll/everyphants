@@ -6,47 +6,15 @@ import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class BaseConversionPlugin extends ReactivePlugin<BigInteger> {
-
     public BaseConversionPlugin() {
         super("进制转换", "更改.png");
-
-        parsers.add(this::parseFromDec);
-        parsers.add(this::parseFromBin);
-        parsers.add(this::parseFromHex);
 
         formatters.add(this::simpleBase);
     }
 
-    public BigInteger parseFromDec(String s) {
-        try {
-            return new BigInteger(s);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public BigInteger parseFromBin(String s) {
-        if (!s.toLowerCase().startsWith("0b")) {
-            return null;
-        }
-
-        try {
-            return new BigInteger(s.substring(2), 2);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public BigInteger parseFromHex(String s) {
-        if (!s.toLowerCase().startsWith("0x")) {
-            return null;
-        }
-
-        try {
-            return new BigInteger(s.substring(2), 16);
-        } catch (Exception e) {
-            return null;
-        }
+    @Override
+    public BigInteger parse(String s) {
+        return new BigInteger(s);
     }
 
     public Result simpleBase(BigInteger num) {
@@ -57,7 +25,7 @@ public class BaseConversionPlugin extends ReactivePlugin<BigInteger> {
         String oct = addSpacesFromLow(num.toString(8), 4);
 
         String text = String.format("Hex %s  ·  Bin %s  ·  Oct %s", hex, bin, oct);
-        Result result = new Result(dec, text, 1, null);
+        Result result = new Result(dec, text, 1);
 
         return result;
     }

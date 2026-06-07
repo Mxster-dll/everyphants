@@ -1,14 +1,11 @@
 package com.mxster.everyphants.model.plugin.core;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.mxster.everyphants.model.Result;
 
-public abstract class ProactivePlugin<T> extends Plugin {
-    protected List<Function<T, Result>> formatters = new ArrayList<>();
+public abstract class ProactivePlugin extends Plugin {
+    private List<Result> cachedResults;
 
     public ProactivePlugin(String name) {
         super(name);
@@ -18,23 +15,17 @@ public abstract class ProactivePlugin<T> extends Plugin {
         super(name, iconPath);
     }
 
-    public List<Result> query() {
-        T t = fetch();
-        List<Result> results = formatters.stream()
-                .map(formatter -> formatter.apply(t))
-                .collect(Collectors.toList());
-
-        // 自动为所有结果附上插件的图标路径
-        if (iconFile != null && !iconFile.isEmpty()) {
-            for (Result r : results) {
-                if (r.getIconPath() == null || r.getIconPath().isEmpty()) {
-                    r.setIconPath(iconFile);
-                }
-            }
+    @Override
+    public final List<Result> query(String input) {
+        if (cachedResults == null) {
+            cachedResults = buildResult();
+            applyPluginIcon(cachedResults);
         }
-
-        return results;
+        return cachedResults;
     }
 
-    public abstract T fetch();
+    /**
+     * 构建结果列表。仅调用一次，结果会被缓存。
+     */
+    protected abstract List<Result> buildResult();
 }

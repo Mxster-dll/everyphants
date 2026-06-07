@@ -4,19 +4,16 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
 
-public class CountdownPlugin extends ProactivePlugin<Void> {
+public class CountdownPlugin extends ProactivePlugin {
     public record CountdownItem(String eventName, LocalDateTime targetTime, String alertTitle) {
     }
 
     private final List<CountdownItem> items;
-    private final Map<CountdownItem, RefreshableResult> cache = new ConcurrentHashMap<>();
 
     public CountdownPlugin() {
         super("倒计时", "日历.png");
@@ -27,23 +24,14 @@ public class CountdownPlugin extends ProactivePlugin<Void> {
     }
 
     @Override
-    public Void fetch() {
-        return null;
-    }
-
-    @Override
-    public List<Result> query() {
+    protected List<Result> buildResult() {
         List<Result> results = new ArrayList<>();
 
         for (CountdownItem item : items) {
-            RefreshableResult result = cache.computeIfAbsent(item, k -> {
-                RefreshableResult r = new RefreshableResult("", "", 1.8, null);
-                r.withRefresh(0, () -> refreshResult(r, k));
-                return r;
-            });
-
-            refreshResult(result, item);
-            results.add(result);
+            RefreshableResult r = new RefreshableResult("", "", 1.8);
+            r.withRefresh(0, () -> refreshResult(r, item));
+            refreshResult(r, item);
+            results.add(r);
         }
 
         if (iconFile != null && !iconFile.isEmpty()) {

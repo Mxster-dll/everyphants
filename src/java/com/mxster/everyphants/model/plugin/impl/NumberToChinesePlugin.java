@@ -6,7 +6,6 @@ import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class NumberToChinesePlugin extends ReactivePlugin<BigInteger> {
-
     private static final String[] DIGITS_UPPER = { "零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖" };
     private static final String[] UNITS_UPPER = { "", "拾", "佰", "仟" };
     private static final String[] BIG_UNITS_UPPER = { "", "万", "亿", "兆", "京", "垓", "秭", "穰", "沟", "涧", "正", "载", "极" };
@@ -18,26 +17,21 @@ public class NumberToChinesePlugin extends ReactivePlugin<BigInteger> {
     public NumberToChinesePlugin() {
         super("数字大小写", "汉字.png");
 
-        parsers.add(this::parseNumber);
         formatters.add(this::toChinese);
     }
 
-    public BigInteger parseNumber(String s) {
-        try {
-            BigInteger num = new BigInteger(s.trim());
-            if (num.compareTo(BigInteger.ZERO) < 0) {
-                return null;
-            }
-            return num;
-        } catch (Exception e) {
-            return null;
-        }
+    @Override
+    public BigInteger parse(String s) {
+        BigInteger num = new BigInteger(s.trim());
+        return num.compareTo(BigInteger.ZERO) >= 0
+                ? num
+                : null;
     }
 
     public Result toChinese(BigInteger num) {
         String lower = convert(num, DIGITS_LOWER, UNITS_LOWER, BIG_UNITS_LOWER);
         String upper = convert(num, DIGITS_UPPER, UNITS_UPPER, BIG_UNITS_UPPER);
-        return new Result(lower, upper, 0.5, null);
+        return new Result(lower, upper, 0.5);
     }
 
     private static String convert(BigInteger num, String[] digits, String[] units, String[] bigUnits) {

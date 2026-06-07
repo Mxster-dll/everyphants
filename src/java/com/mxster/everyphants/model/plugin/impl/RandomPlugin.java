@@ -1,55 +1,43 @@
 package com.mxster.everyphants.model.plugin.impl;
 
 import java.math.BigInteger;
-import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class RandomPlugin extends ReactivePlugin<BigInteger> {
-
-    private final Map<BigInteger, RefreshableResult> cache = new ConcurrentHashMap<>();
+    private static final Random RANDOM = new Random();
 
     public RandomPlugin() {
         super("生成随机数", "随机.png");
 
-        parsers.add(this::parseToUpperBound);
-        formatters.add(this::rand);
+        formatters.add(this::buildResult);
     }
 
-    public BigInteger parseToUpperBound(String s) {
-        try {
-            var num = new BigInteger(s);
-            if (num.compareTo(BigInteger.ZERO) <= 0) {
-                return null;
-            }
-            return num;
-        } catch (Exception e) {
-            return null;
-        }
+    @Override
+    public BigInteger parse(String s) {
+        BigInteger num = new BigInteger(s);
+        return num.compareTo(BigInteger.ZERO) > 0
+                ? num
+                : null;
     }
 
-    public Result rand(BigInteger num) {
-        return cache.computeIfAbsent(num, key -> {
-            String range = "随机数 [0, " + key.toString() + "]";
-            RefreshableResult result = new RefreshableResult(
-                    generate(key).toString(), range, 1, null);
-            result.withRefresh(0, () -> {
-                result.setTitle(generate(key).toString());
-            });
-            return result;
-        });
+    public Result buildResult(BigInteger num) {
+        String range = String.format("随机数 [0, %s]", num.toString());
+        RefreshableResult result = new RefreshableResult(
+                random(num).toString(), range, 1);
+        result.withRefresh(0, () -> result.setTitle(random(num).toString()));
+        return result;
     }
 
-    private static BigInteger generate(BigInteger bound) {
-        Random random = new Random();
+    private static BigInteger random(BigInteger bound) {
         BigInteger result;
         do {
-            result = new BigInteger(bound.bitLength(), random);
+            result = new BigInteger(bound.bitLength(), RANDOM);
         } while (result.compareTo(bound) > 0);
+
         return result;
     }
 }

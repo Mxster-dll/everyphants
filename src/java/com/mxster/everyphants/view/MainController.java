@@ -49,6 +49,7 @@ public class MainController {
     private WindowDragHandler dragHandler;
     private InputThrottle inputThrottle;
     private List<Result> currentResults = List.of();
+    private List<Result> persistentResults = List.of();
     private final Map<Result, Node> nodeCache = new LinkedHashMap<>();
 
     public void init(Stage stage) {
@@ -60,7 +61,12 @@ public class MainController {
 
         PluginManager manager = new PluginManager();
 
+        // 持久插件：启动时注册一次，之后不再重新查询
+        persistentResults = new ArrayList<>();
         for (var plugin : manager.getPlugins()) {
+            if (plugin instanceof ProactivePlugin) {
+                persistentResults.addAll(plugin.query(""));
+            }
             if (plugin instanceof ReactivePlugin<?> rp) {
                 rp.addResultChangedListener(() -> refreshFromCache(manager));
             }
@@ -127,22 +133,19 @@ public class MainController {
 
     private void doUpdate(PluginManager manager) {
         String text = inputField.getText();
-        if (text == null || text.isEmpty()) {
-            currentResults = List.of();
-            renderResults();
-            updateResultVisibility();
-            return;
-        }
+        String trimmed = (text == null || text.isEmpty()) ? "" : text.trim();
 
-        String trimmed = text.trim();
+        List<Result> results;
 
-        List<Result> results = new ArrayList<>();
-        for (var plugin : manager.getPlugins()) {
-            if (plugin instanceof ReactivePlugin<?> rp) {
-                results.addAll(rp.query(trimmed));
-            } else if (plugin instanceof ProactivePlugin<?> pp) {
-                results.addAll(pp.query());
+        if (!trimmed.isEmpty()) {
+            results = new ArrayList<>(persistentResults);
+            for (var plugin : manager.getPlugins()) {
+                if (!(plugin instanceof ProactivePlugin)) {
+                    results.addAll(plugin.query(trimmed));
+                }
             }
+        } else {
+            results = List.of();
         }
 
         currentResults = results;

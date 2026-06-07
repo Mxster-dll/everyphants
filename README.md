@@ -59,4 +59,7 @@
 - 输入有关 内容固定
 - 输入有关 内容刷新
 
-故实现给出一个接口 Refreshable 和两个基类 ProactivePlugin 和 ReactivePlugin
+故实现给出一个接口 Refreshable 和两个基类 PersistentPlugin 和 ReactivePlugin
+
+从实现来看，PersistentPlugin 仅在应用启动时注册一次其给出的 Result，而 ReactivePlugin 则是在输入变化时，触发 Result 的重建。
+// 原先是有 ProactivePlugin 的，但是因为本身就是小项目，故弃用

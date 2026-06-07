@@ -1,35 +1,31 @@
 package com.mxster.everyphants.model.plugin.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
 
-public class TimePlugin extends ProactivePlugin<Date> {
+public class TimePlugin extends ProactivePlugin {
     private RefreshableResult cachedResult;
 
     public TimePlugin() {
         super("时间", "时间.png");
-
-        formatters.add(this::showTime);
     }
 
     @Override
-    public Date fetch() {
-        return new Date();
-    }
-
-    public Result showTime(Date date) {
+    protected List<Result> buildResult() {
         if (cachedResult == null) {
+            Date now = new Date();
             cachedResult = new RefreshableResult(
-                    date.toString(), Long.toString(date.getTime()), 2, null)
+                    now.toString(), Long.toString(now.getTime()), 2)
                     .withRefresh(0, () -> {
-                        Date now = new Date();
-                        cachedResult.setTitle(now.toString());
-                        cachedResult.setDisplayText(Long.toString(now.getTime()));
+                        Date n = new Date();
+                        cachedResult.setTitle(n.toString());
+                        cachedResult.setDisplayText(Long.toString(n.getTime()));
                     });
         }
-        return cachedResult;
+        return List.of(cachedResult);
     }
 }

@@ -9,8 +9,12 @@ public class ColorPlugin extends ReactivePlugin<Color> {
     public ColorPlugin() {
         super("颜色", "颜色.png");
 
-        parsers.add(this::parseWebColor);
         formatters.add(this::hexColorText);
+    }
+
+    @Override
+    public Color parse(String s) {
+        return Color.web(s);
     }
 
     public Result hexColorText(Color color) {
@@ -33,17 +37,9 @@ public class ColorPlugin extends ReactivePlugin<Color> {
                 "[%.0f%%]  #%s  ·  RGB %d %d %d  ·  HSB %.1f° %.1f%% %.1f%%",
                 alpha, hex, red, green, blue, hue, saturation, brightness);
 
-        Result result = new Result(title, displayText, 1, null);
+        Result result = new Result(title, displayText, 1);
         // 卡片背景色 = 用户输入的颜色
         result.setBackgroundColor(String.format("#%02X%02X%02X", red, green, blue));
         return result;
-    }
-
-    public Color parseWebColor(String s) {
-        try {
-            return Color.web(s);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
     }
 }

@@ -12,7 +12,6 @@ import com.mxster.everyphants.model.Result;
 import javafx.application.Platform;
 
 public abstract class ReactivePlugin<T> extends Plugin {
-    protected List<Function<String, T>> parsers = new ArrayList<>();
     protected List<Function<T, Result>> formatters = new ArrayList<>();
 
     private final List<Runnable> resultChangedListeners = new ArrayList<>();
@@ -40,35 +39,30 @@ public abstract class ReactivePlugin<T> extends Plugin {
         });
     }
 
-    public List<Result> query(String query) {
-        List<T> nonNullResults = parsers.stream()
-                .map(parser -> parser.apply(query))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+    public abstract T parse(String query);
 
-        if (nonNullResults.isEmpty()) {
+    @Override
+    public List<Result> query(String text) {
+        T t = safeParse(text);
+        if (t == null) {
             return Collections.emptyList();
         }
 
-        if (nonNullResults.size() > 1) {
-            System.out.println("[Warning]: parser 冲突 (" + nonNullResults.size() + "), 已采用第一个匹配");
-        }
-
-        T selected = nonNullResults.get(0);
         List<Result> results = formatters.stream()
-                .map(formatter -> formatter.apply(selected))
+                .map(formatter -> formatter.apply(t))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        // 自动为所有结果附上插件的图标路径
-        if (iconFile != null && !iconFile.isEmpty()) {
-            for (Result r : results) {
-                if (r.getIconPath() == null || r.getIconPath().isEmpty()) {
-                    r.setIconPath(iconFile);
-                }
-            }
-        }
+        applyPluginIcon(results);
 
         return results;
+    }
+
+    private T safeParse(String text) {
+        try {
+            return parse(text);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

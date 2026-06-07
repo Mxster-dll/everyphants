@@ -58,24 +58,26 @@ public class TranslatePlugin extends ReactivePlugin<String> {
     public TranslatePlugin() {
         super("翻译", "翻译.png");
 
-        parsers.add(s -> {
-            if (s == null || s.isEmpty() || s.matches("\\d+"))
-                return null;
-            if (isNonEnglishColor(s))
-                return null;
-            boolean hasLetterOrHan = false;
-            for (int i = 0; i < s.length(); i++) {
-                char c = s.charAt(i);
-                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-                        || Character.UnicodeBlock.of(c) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS) {
-                    hasLetterOrHan = true;
-                    break;
-                }
-            }
-            return hasLetterOrHan ? s.trim() : null;
-        });
-
         formatters.add(this::translateToChinese);
+    }
+
+    @Override
+    public String parse(String s) {
+        if (s == null || s.isEmpty() || s.matches("\\d+"))
+            return null;
+        if (isNonEnglishColor(s))
+            return null;
+
+        boolean hasLetterOrHan = false;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+                    || Character.UnicodeBlock.of(c) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS) {
+                hasLetterOrHan = true;
+                break;
+            }
+        }
+        return hasLetterOrHan ? s.trim() : null;
     }
 
     public Result translateToChinese(String text) {
@@ -83,7 +85,7 @@ public class TranslatePlugin extends ReactivePlugin<String> {
             String titlePrefix = lastTitle != null ? lastTitle : "翻译中";
             String displayPrefix = lastDisplay != null ? lastDisplay : key;
 
-            LoadingResult result = new LoadingResult(titlePrefix, displayPrefix, 1, null);
+            LoadingResult result = new LoadingResult(titlePrefix, displayPrefix, 1);
 
             new Thread(() -> {
                 try {

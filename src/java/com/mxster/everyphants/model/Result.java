@@ -6,11 +6,10 @@ public class Result {
     private double score;
     private String iconPath;
 
-    public Result(String title, String displayText, double score, String iconPath) {
+    public Result(String title, String displayText, double score) {
         this.title = title;
         this.displayText = displayText;
         this.score = score;
-        this.iconPath = iconPath;
     }
 
     public String getTitle() {
@@ -44,8 +43,6 @@ public class Result {
     public void setIconPath(String iconPath) {
         this.iconPath = iconPath;
     }
-
-    // ---- 背景色（CSS 色值，如 "#ff0000"） ----
 
     private String backgroundColor;
 

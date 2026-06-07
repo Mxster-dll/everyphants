@@ -9,21 +9,23 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
     public EncryptionPlugin() {
         super("加密", "加密.png");
 
-        parsers.add(s -> {
-            if (s.matches("\\d+"))
-                return null;
-            if (isNonEnglishColor(s))
-                return null;
-            for (int i = 0; i < s.length(); i++) {
-                if (Character.UnicodeBlock.of(s.charAt(i)) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS)
-                    return null;
-            }
-            return s;
-        });
-
         formatters.add(this::buildCaesar);
         formatters.add(this::buildFence);
         formatters.add(this::buildMorseCode);
+    }
+
+    @Override
+    public String parse(String s) {
+        if (s.matches("\\d+")
+                || isNonEnglishColor(s)) {
+            return null;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (Character.UnicodeBlock.of(s.charAt(i)) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS) {
+                return null;
+            }
+        }
+        return s;
     }
 
     private static final int CAESAR_SHIFT = 3;
@@ -43,7 +45,7 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
     }
 
     public Result buildCaesar(String s) {
-        return new Result(caesar(s), "凯撒加密(3)", 0.5, null);
+        return new Result(caesar(s), "凯撒加密(3)", 0.5);
     }
 
     public static String fence(String s) {
@@ -56,7 +58,7 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
     }
 
     public Result buildFence(String s) {
-        return new Result(fence(s), "栅栏加密(2)", 0.5, null);
+        return new Result(fence(s), "栅栏加密(2)", 0.5);
     }
 
     private static boolean isNonEnglishColor(String s) {
@@ -146,7 +148,7 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
     }
 
     public Result buildMorseCode(String s) {
-        return new Result(morseCode(s), "摩斯电码", 0.5, null);
+        return new Result(morseCode(s), "摩斯电码", 0.5);
 
     }
 }

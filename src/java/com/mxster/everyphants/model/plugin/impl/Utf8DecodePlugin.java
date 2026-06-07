@@ -6,16 +6,14 @@ import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class Utf8DecodePlugin extends ReactivePlugin<String> {
-
     public Utf8DecodePlugin() {
         super("UTF-8解码", "解码.png");
-
-        parsers.add(this::parseHexBytes);
 
         formatters.add(this::buildUtf8Decode);
     }
 
-    public String parseHexBytes(String s) {
+    @Override
+    public String parse(String s) {
         try {
             String hex = s.replaceAll("\\s+", "");
             if (hex.length() % 2 != 0) {
@@ -51,6 +49,6 @@ public class Utf8DecodePlugin extends ReactivePlugin<String> {
         }
         if (bad > s.length() * 0.25)
             return null;
-        return new Result(s, "UTF-8解码", 0.1, null);
+        return new Result(s, "UTF-8解码", 0.1);
     }
 }

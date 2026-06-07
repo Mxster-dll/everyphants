@@ -12,7 +12,6 @@ import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
-
     private static final BigInteger TWO = BigInteger.TWO;
 
     private final Map<BigInteger, RefreshableResult> cache = new ConcurrentHashMap<>();
@@ -20,25 +19,20 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
     public PrimeFactorizationPlugin() {
         super("质因数分解", "计算.png");
 
-        parsers.add(this::parseToInteger);
         formatters.add(this::formatPrimeFactorization);
     }
 
-    public BigInteger parseToInteger(String s) {
-        try {
-            var num = new BigInteger(s);
-            if (num.compareTo(BigInteger.ONE) <= 0) {
-                return null;
-            }
-            return num;
-        } catch (Exception e) {
-            return null;
-        }
+    @Override
+    public BigInteger parse(String s) {
+        BigInteger num = new BigInteger(s);
+        return num.compareTo(BigInteger.ONE) > 0
+                ? num
+                : null;
     }
 
     public Result formatPrimeFactorization(BigInteger num) {
         return cache.computeIfAbsent(num, key -> {
-            LoadingResult result = new LoadingResult("计算中", key + " 正在分解", 1, null);
+            LoadingResult result = new LoadingResult("计算中", key + " 正在分解", 1);
 
             new Thread(() -> {
                 try {

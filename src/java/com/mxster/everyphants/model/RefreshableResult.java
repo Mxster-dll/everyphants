@@ -6,8 +6,8 @@ public class RefreshableResult extends Result implements Refreshable {
     private int refreshInterval = 0;
     private Runnable refreshAction;
 
-    public RefreshableResult(String title, String displayText, double score, String iconPath) {
-        super(title, displayText, score, iconPath);
+    public RefreshableResult(String title, String displayText, double score) {
+        super(title, displayText, score);
     }
 
     public RefreshableResult withRefresh(int intervalMs, Runnable action) {

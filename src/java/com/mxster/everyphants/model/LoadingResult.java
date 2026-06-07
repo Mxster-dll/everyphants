@@ -1,8 +1,8 @@
 package com.mxster.everyphants.model;
 
 public class LoadingResult extends RefreshableResult {
-    public LoadingResult(String titlePrefix, String displayPrefix, double score, String iconPath) {
-        super(titlePrefix + ".", displayPrefix + ".", score, iconPath);
+    public LoadingResult(String titlePrefix, String displayPrefix, double score) {
+        super(titlePrefix + ".", displayPrefix + ".", score);
 
         withRefresh(0, () -> {
             int dots = (int) ((System.currentTimeMillis() / 500) % 3) + 1;
