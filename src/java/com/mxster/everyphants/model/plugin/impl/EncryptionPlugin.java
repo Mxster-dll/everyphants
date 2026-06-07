@@ -139,7 +139,7 @@ public class EncryptionPlugin extends ReactivePlugin<String> {
                 case '&' -> "....";
                 case '@' -> ".--.-.";
                 default -> null;
-            } + " ";
+            } + "  ";
         }
 
         return ans;
