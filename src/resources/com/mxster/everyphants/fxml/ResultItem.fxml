@@ -7,24 +7,22 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
 <fx:root type="StackPane"
          xmlns="http://javafx.com/javafx/19"
          xmlns:fx="http://javafx.com/fxml/1"
          styleClass="result-wrapper">
-
   <!-- 彩色背景层（默认隐藏） -->
-  <Region fx:id="colorBg" styleClass="result-color-bg"
-          visible="false" managed="false"/>
 
+  <Region fx:id="colorBg" styleClass="result-color-bg"
+            visible="false" managed="false"/>
   <!-- 主卡片内容 -->
   <VBox styleClass="result-item">
     <HBox fx:id="iconRow" styleClass="result-icon-row"
-          spacing="15" alignment="CENTER_LEFT">
+              spacing="15" alignment="CENTER_LEFT">
       <ImageView fx:id="iconView" styleClass="result-icon"
-                 fitWidth="24" fitHeight="24"
-                 preserveRatio="true" smooth="true"
-                 visible="false" managed="false">
+                       fitWidth="24" fitHeight="24"
+                       preserveRatio="true" smooth="true"
+                       visible="false" managed="false">
         <HBox.margin>
           <Insets left="9"/>
         </HBox.margin>
@@ -32,15 +30,13 @@
       <VBox fx:id="textGroup" styleClass="result-text-group">
         <Label fx:id="titleLabel" styleClass="result-title"/>
         <Label fx:id="bodyLabel" styleClass="result-body"
-               visible="false" managed="false"/>
+                       visible="false" managed="false"/>
       </VBox>
     </HBox>
   </VBox>
-
   <!-- 悬停高亮条 -->
   <Region fx:id="bar" styleClass="result-bar"
-          prefWidth="3" maxWidth="3" minWidth="3"
-          maxHeight="Infinity"
-          visible="false" managed="false"/>
-
+            prefWidth="3" maxWidth="3" minWidth="3"
+            maxHeight="Infinity"
+            visible="false" managed="false"/>
 </fx:root>

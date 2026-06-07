@@ -26,11 +26,16 @@ public class ResultItem extends StackPane {
 
     public static Consumer<String> onCopyFeedback;
 
-    @FXML private Region colorBg;
-    @FXML private ImageView iconView;
-    @FXML private Label titleLabel;
-    @FXML private Label bodyLabel;
-    @FXML private Region bar;
+    @FXML
+    private Region colorBg;
+    @FXML
+    private ImageView iconView;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private Label bodyLabel;
+    @FXML
+    private Region bar;
 
     public ResultItem() {
         FXMLLoader loader = new FXMLLoader(
@@ -139,7 +144,8 @@ public class ResultItem extends StackPane {
     }
 
     private static void copyToClipboard(String text) {
-        if (text == null || text.isEmpty()) return;
+        if (text == null || text.isEmpty())
+            return;
         ClipboardContent content = new ClipboardContent();
         content.putString(text);
         Clipboard.getSystemClipboard().setContent(content);
