@@ -22,12 +22,11 @@ public class InputThrottle {
         long now = System.currentTimeMillis();
         long elapsed = now - lastUpdateTime;
 
+        throttle.stop();
         if (elapsed >= MIN_INTERVAL_MS) {
-            throttle.stop();
             lastUpdateTime = System.currentTimeMillis();
             action.run();
         } else {
-            throttle.stop();
             throttle.setDuration(Duration.millis(MIN_INTERVAL_MS - elapsed));
             throttle.play();
         }

@@ -318,6 +318,7 @@ classDiagram
     MainController --> PluginManager
     MainController --> InputThrottle
     MainController --> WindowDragHandler
+    MainController ..> Result
     App --> MainController
     App ..> WindowsAcrylicUtil 
 ```
