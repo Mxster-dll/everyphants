@@ -185,29 +185,27 @@ config:
     fontSize: "14px"
 ---
 classDiagram
-    %% ===== Result 体系 =====
     class Result {
-        +String title
-        +String displayText
-        +double score
+        +title: String
+        +displayText: String
+        +score: double
         +getTitle() String
     }
     
     class RefreshableResult {
-        +withRefresh(Runnable) RefreshableResult
+        +withRefresh(action: Runnable) RefreshableResult
         +refresh() void
     }
     
     class LoadingResult {
-        +finish(title, displayText) void
+        +finish(title: String, displayText: String) void
     }
     
-    %% ===== Plugin 抽象体系 =====
     class Plugin {
         <<abstract>>
-        #String name
-        #String iconFile
-        +query(String)* Result
+        #name: String
+        #iconFile: String
+        +query(input: String)* Result
     }
     
     class ProactivePlugin {
@@ -217,41 +215,38 @@ classDiagram
     
     class ReactivePlugin~T~ {
         <<abstract>>
-        +parse(String)* T
-        +build(T)* Result
+        +parse(query: String)* T
+        +build(t: T)* Result
     }
     
-    %% ===== 中间抽象层 =====
     class EncodePlugin {
         <<abstract>>
+        +parse(query: String) String
     }
     class DecodePlugin {
         <<abstract>>
+        +build(s: String) Result
     }
     class EncryptionPlugin {
         <<abstract>>
+        +parse(s: String) String
     }
     
-    %% ===== Proactive 具体插件 =====
     class TimePlugin
     class CountdownPlugin
     
-    %% ===== Encode 具体插件 =====
     class Base64EncodePlugin
     class UrlEncodePlugin
     class Utf8EncodePlugin
     
-    %% ===== Decode 具体插件 =====
     class Base64DecodePlugin
     class UrlDecodePlugin
     class Utf8DecodePlugin
     
-    %% ===== Encryption 具体插件 =====
     class CaesarEncryptionPlugin
     class FenceEncryptionPlugin
     class MorseEncryptionPlugin
     
-    %% ===== 直接继承 ReactivePlugin 的插件 =====
     class ColorPlugin
     class BaseConversionPlugin
     class RandomPlugin
@@ -260,41 +255,32 @@ classDiagram
     class PrimeFactorizationPlugin
     class AnswerBookPlugin
     
-    %% ===== 管理器 =====
     class PluginManager {
-        -List~Plugin~ plugins
+        -plugins: List~Plugin~
         +getPlugins() List~Plugin~
     }
     
-    %% ===== 视图层 =====
     class MainController {
-        +init(Stage) void
+        +init(stage: Stage) void
     }
     class ResultItem
-    class ResultItemFactory {
-        +create(title, body, iconPath, bgColor)$ Node
-    }
     class InputThrottle
     class WindowDragHandler
     
-    %% ===== 工具类 =====
     class WindowsAcrylicUtil {
-        +applyRoundedCorners(Stage, int)$ void
+        +applyRoundedCorners(stage: Stage, radius: int)$ void
     }
     
-    %% ===== 应用入口 =====
     class App {
-        +start(Stage) void
+        +start(stage: Stage) void
     }
     class Application {
         <<JavaFX>>
     }
     
-    %% ===== Result 继承 =====
     RefreshableResult --|> Result
     LoadingResult --|> RefreshableResult
     
-    %% ===== Plugin 继承树 =====
     ProactivePlugin --|> Plugin
     ReactivePlugin --|> Plugin
     
@@ -327,13 +313,11 @@ classDiagram
     
     App --|> Application
     
-    %% ===== 关联关系 =====
-    PluginManager *--> Plugin : 管理
-    Plugin ..> Result : 返回
-    MainController --> PluginManager : 使用
-    MainController --> InputThrottle : 使用
-    MainController --> WindowDragHandler : 使用
-    ResultItemFactory ..> ResultItem : 创建
-    App --> MainController : 创建
-    App ..> WindowsAcrylicUtil : 使用
+    PluginManager *--> Plugin
+    Plugin ..> Result
+    MainController --> PluginManager
+    MainController --> InputThrottle
+    MainController --> WindowDragHandler
+    App --> MainController
+    App ..> WindowsAcrylicUtil 
 ```

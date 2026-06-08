@@ -195,11 +195,20 @@ public class MainController {
         for (Result r : sorted) {
             Node node = nodeCache.get(r);
             if (node == null) {
-                node = ResultItemFactory.create(r.getTitle(), r.getDisplayText(),
-                        r.getIconPath(), r.getBackgroundColor());
+                ResultItem item = new ResultItem();
+
+                item.setTitle(r.getTitle());
+                item.setBody(r.getDisplayText());
+                item.setIconPath(r.getIconPath());
+                item.setBackgroundColor(r.getBackgroundColor());
+
+                node = item;
                 nodeCache.put(r, node);
             } else {
-                ResultItemFactory.updateText(node, r.getTitle(), r.getDisplayText());
+                if (node instanceof ResultItem item) {
+                    item.setTitle(r.getTitle());
+                    item.setBody(r.getDisplayText());
+                }
             }
         }
 
