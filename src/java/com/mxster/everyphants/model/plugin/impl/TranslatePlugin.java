@@ -24,8 +24,6 @@ import com.mxster.everyphants.model.LoadingResult;
 import com.mxster.everyphants.model.Result;
 import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
-import javafx.scene.paint.Color;
-
 public class TranslatePlugin extends ReactivePlugin<String> {
     private static final String APP_ID;
     private static final String SECRET_KEY;
@@ -57,8 +55,6 @@ public class TranslatePlugin extends ReactivePlugin<String> {
 
     public TranslatePlugin() {
         super("翻译", "翻译.png");
-
-        formatters.add(this::translateToChinese);
     }
 
     @Override
@@ -66,7 +62,7 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         if (s == null || s.isEmpty() || s.matches("\\d+")) {
             return null;
         }
-        if (isNonEnglishColor(s)) {
+        if (EncryptionPlugin.isNonEnglishColor(s)) {
             return null;
         }
 
@@ -82,7 +78,8 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         return hasLetterOrHan ? s.trim() : null;
     }
 
-    public Result translateToChinese(String text) {
+    @Override
+    public Result build(String text) {
         return cache.computeIfAbsent(text, key -> {
             String titlePrefix = lastTitle != null ? lastTitle : "翻译中";
             String displayPrefix = lastDisplay != null ? lastDisplay : key;
@@ -150,26 +147,6 @@ public class TranslatePlugin extends ReactivePlugin<String> {
         return block == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
                 || block == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
                 || block == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS;
-    }
-
-    private static boolean isNonEnglishColor(String s) {
-        boolean hasNonEnglish = false;
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))) {
-                hasNonEnglish = true;
-                break;
-            }
-        }
-        if (!hasNonEnglish) {
-            return false;
-        }
-        try {
-            Color.web(s);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     private String translateMixedTo(String text, String targetLang) throws Exception {

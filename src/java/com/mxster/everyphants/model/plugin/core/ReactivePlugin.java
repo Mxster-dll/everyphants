@@ -1,19 +1,13 @@
 package com.mxster.everyphants.model.plugin.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import com.mxster.everyphants.model.Result;
 
 import javafx.application.Platform;
 
-public abstract class ReactivePlugin<T> extends Plugin {
-    protected List<Function<T, Result>> formatters = new ArrayList<>();
+import com.mxster.everyphants.model.Result;
 
+public abstract class ReactivePlugin<T> extends Plugin {
     private final List<Runnable> resultChangedListeners = new ArrayList<>();
 
     public ReactivePlugin(String name) {
@@ -41,21 +35,23 @@ public abstract class ReactivePlugin<T> extends Plugin {
 
     public abstract T parse(String query);
 
+    public abstract Result build(T t);
+
     @Override
-    public List<Result> query(String text) {
+    public Result query(String text) {
         T t = safeParse(text);
         if (t == null) {
-            return Collections.emptyList();
+            return null;
         }
 
-        List<Result> results = formatters.stream()
-                .map(formatter -> formatter.apply(t))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        Result result = build(t);
+        if (result == null) {
+            return null;
+        }
 
-        applyPluginIcon(results);
+        applyPluginIcon(result);
 
-        return results;
+        return result;
     }
 
     private T safeParse(String text) {

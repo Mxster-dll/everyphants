@@ -1,17 +1,15 @@
 package com.mxster.everyphants.model;
 
-import com.mxster.everyphants.model.plugin.core.Refreshable;
-
-public class RefreshableResult extends Result implements Refreshable {
-    private int refreshInterval = 0;
+public class RefreshableResult extends Result {
+    private boolean refreshing;
     private Runnable refreshAction;
 
     public RefreshableResult(String title, String displayText, double score) {
         super(title, displayText, score);
     }
 
-    public RefreshableResult withRefresh(int intervalMs, Runnable action) {
-        this.refreshInterval = intervalMs;
+    public RefreshableResult withRefresh(Runnable action) {
+        this.refreshing = true;
         this.refreshAction = action;
         return this;
     }
@@ -23,20 +21,10 @@ public class RefreshableResult extends Result implements Refreshable {
     }
 
     public void stopRefreshing() {
-        this.refreshInterval = -1;
+        this.refreshing = false;
     }
 
     public boolean isRefreshing() {
-        return refreshInterval == 0 && refreshAction != null;
-    }
-
-    @Override
-    public int getRefreshInterval() {
-        return refreshInterval;
-    }
-
-    @Override
-    public void setRefreshInterval(int millis) {
-        this.refreshInterval = millis;
+        return refreshing && refreshAction != null;
     }
 }

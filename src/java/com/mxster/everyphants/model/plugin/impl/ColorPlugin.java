@@ -8,8 +8,6 @@ import javafx.scene.paint.Color;
 public class ColorPlugin extends ReactivePlugin<Color> {
     public ColorPlugin() {
         super("颜色", "颜色.png");
-
-        formatters.add(this::hexColorText);
     }
 
     @Override
@@ -17,7 +15,8 @@ public class ColorPlugin extends ReactivePlugin<Color> {
         return Color.web(s);
     }
 
-    public Result hexColorText(Color color) {
+    @Override
+    public Result build(Color color) {
         String hex = color.toString().substring(2);
 
         String title = "#" +

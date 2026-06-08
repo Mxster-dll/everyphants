@@ -4,7 +4,7 @@ public class LoadingResult extends RefreshableResult {
     public LoadingResult(String titlePrefix, String displayPrefix, double score) {
         super(titlePrefix + ".", displayPrefix + ".", score);
 
-        withRefresh(0, () -> {
+        withRefresh(() -> {
             int dots = (int) ((System.currentTimeMillis() / 500) % 3) + 1;
             String dotStr = ".".repeat(dots);
             setTitle(titlePrefix + dotStr);

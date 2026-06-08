@@ -14,8 +14,6 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 public class AnswerBookPlugin extends ReactivePlugin<String> {
     public AnswerBookPlugin() {
         super("答案之书", "书.png");
-
-        formatters.add(this::getAnswer);
     }
 
     @Override
@@ -24,7 +22,8 @@ public class AnswerBookPlugin extends ReactivePlugin<String> {
         return isQuestion ? input : null;
     }
 
-    public Result getAnswer(String query) {
+    @Override
+    public Result build(String query) {
         final Random random = new Random();
         File file = new File("src/resources/com/mxster/everyphants/data/答案之书.txt");
 
@@ -34,6 +33,7 @@ public class AnswerBookPlugin extends ReactivePlugin<String> {
 
             String line = reader.readLine();
             for (int cnt = 1; line != null; cnt++) {
+                // 保证等概率抽取每一行
                 if (random.nextInt(cnt) == 0) {
                     answer = line;
                 }

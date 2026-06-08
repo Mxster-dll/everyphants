@@ -60,30 +60,43 @@ public class MainController {
         rootPane.setOnMouseDragged(dragHandler::onDragged);
 
         PluginManager manager = new PluginManager();
+        persistentResults = registerPlugins(manager);
 
-        persistentResults = new ArrayList<>();
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                refreshCurrentResults();
+            }
+        }.start();
+
+        inputThrottle = new InputThrottle(() -> doUpdate(manager));
+        setupCopyFeedback();
+        setupInputListener();
+        setupClearButton();
+
+        updateResultVisibility();
+    }
+
+    private List<Result> registerPlugins(PluginManager manager) {
+        List<Result> results = new ArrayList<>();
         for (var plugin : manager.getPlugins()) {
             if (plugin instanceof ProactivePlugin) {
-                persistentResults.addAll(plugin.query(""));
+                Result r = plugin.query("");
+                if (r != null) {
+                    results.add(r);
+                }
             }
             if (plugin instanceof ReactivePlugin<?> rp) {
                 rp.addResultChangedListener(() -> refreshFromCache(manager));
             }
         }
+        return results;
+    }
 
-        AnimationTimer frameTimer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                refreshCurrentResults();
-            }
-        };
-        frameTimer.start();
-
-        inputThrottle = new InputThrottle(() -> doUpdate(manager));
-
+    private void setupCopyFeedback() {
         feedbackLabel.setOpacity(0);
 
-        ResultItemFactory.onCopyFeedback = text -> {
+        ResultItem.onCopyFeedback = text -> {
             feedbackLabel.setText("已复制: " + text);
 
             FadeTransition fadeIn = new FadeTransition(Duration.millis(200), feedbackLabel);
@@ -99,34 +112,35 @@ public class MainController {
             SequentialTransition seq = new SequentialTransition(feedbackLabel, fadeIn, hold, fadeOut);
             seq.play();
         };
-        ResultItemFactory.installCopyFeedback();
+    }
 
+    private void setupInputListener() {
         inputField.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal.trim().equals(oldVal.trim())) {
-                return;
+            if (!newVal.trim().equals(oldVal.trim())) {
+                inputThrottle.trigger();
             }
-            inputThrottle.trigger();
         });
+    }
 
+    private void setupClearButton() {
         VBox contentBox = (VBox) rootPane.getChildren().get(0);
 
         Label clearBtn = new Label("✕");
-        clearBtn.setStyle(
-                "-fx-text-fill: rgba(255,255,255,0.3); -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 12 0 0;");
-        clearBtn.setOnMouseClicked(e -> inputField.clear());
-        clearBtn.setOnMouseEntered(e -> clearBtn.setStyle(
-                "-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 12 0 0;"));
-        clearBtn.setOnMouseExited(e -> clearBtn.setStyle(
-                "-fx-text-fill: rgba(255,255,255,0.3); -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 12 0 0;"));
+        String baseStyle = "-fx-text-fill: rgba(255,255,255,0.3); -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 12 0 0;";
+        String hoverStyle = "-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 12 0 0;";
 
-        contentBox.getChildren().remove(inputField);
+        clearBtn.setStyle(baseStyle);
+        clearBtn.setOnMouseClicked(e -> inputField.clear());
+        clearBtn.setOnMouseEntered(e -> clearBtn.setStyle(hoverStyle));
+        clearBtn.setOnMouseExited(e -> clearBtn.setStyle(baseStyle));
+
         StackPane inputWrapper = new StackPane(inputField, clearBtn);
         StackPane.setAlignment(clearBtn, javafx.geometry.Pos.CENTER_RIGHT);
         clearBtn.setTranslateX(-5);
         clearBtn.setTranslateY(-5);
-        contentBox.getChildren().add(0, inputWrapper);
 
-        updateResultVisibility();
+        contentBox.getChildren().remove(inputField);
+        contentBox.getChildren().add(0, inputWrapper);
     }
 
     private void doUpdate(PluginManager manager) {
@@ -139,7 +153,10 @@ public class MainController {
             results = new ArrayList<>(persistentResults);
             for (var plugin : manager.getPlugins()) {
                 if (!(plugin instanceof ProactivePlugin)) {
-                    results.addAll(plugin.query(trimmed));
+                    Result r = plugin.query(trimmed);
+                    if (r != null) {
+                        results.add(r);
+                    }
                 }
             }
         } else {
@@ -154,7 +171,7 @@ public class MainController {
     private void refreshCurrentResults() {
         boolean needsRender = false;
         for (var r : currentResults) {
-            if (r instanceof RefreshableResult rr && rr.getRefreshInterval() == 0) {
+            if (r instanceof RefreshableResult rr && rr.isRefreshing()) {
                 rr.refresh();
                 needsRender = true;
             }

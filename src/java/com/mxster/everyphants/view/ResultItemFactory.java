@@ -1,15 +1,11 @@
 package com.mxster.everyphants.view;
 
-import java.util.function.Consumer;
-
 import javafx.scene.Node;
 
 public final class ResultItemFactory {
 
     private ResultItemFactory() {
     }
-
-    public static Consumer<String> onCopyFeedback;
 
     public static Node create(String title, String body) {
         return create(title, body, null, null);
@@ -33,9 +29,5 @@ public final class ResultItemFactory {
             item.setTitle(title);
             item.setBody(body);
         }
-    }
-
-    public static void installCopyFeedback() {
-        ResultItem.onCopyFeedback = onCopyFeedback;
     }
 }

@@ -12,8 +12,6 @@ public class RandomPlugin extends ReactivePlugin<BigInteger> {
 
     public RandomPlugin() {
         super("生成随机数", "随机.png");
-
-        formatters.add(this::buildResult);
     }
 
     @Override
@@ -24,11 +22,12 @@ public class RandomPlugin extends ReactivePlugin<BigInteger> {
                 : null;
     }
 
-    public Result buildResult(BigInteger num) {
+    @Override
+    public Result build(BigInteger num) {
         String range = String.format("随机数 [0, %s]", num.toString());
         RefreshableResult result = new RefreshableResult(
                 random(num).toString(), range, 1);
-        result.withRefresh(0, () -> result.setTitle(random(num).toString()));
+        result.withRefresh(() -> result.setTitle(random(num).toString()));
         return result;
     }
 

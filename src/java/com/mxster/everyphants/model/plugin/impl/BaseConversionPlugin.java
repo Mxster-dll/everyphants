@@ -8,8 +8,6 @@ import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 public class BaseConversionPlugin extends ReactivePlugin<BigInteger> {
     public BaseConversionPlugin() {
         super("进制转换", "更改.png");
-
-        formatters.add(this::simpleBase);
     }
 
     @Override
@@ -17,7 +15,8 @@ public class BaseConversionPlugin extends ReactivePlugin<BigInteger> {
         return new BigInteger(s);
     }
 
-    public Result simpleBase(BigInteger num) {
+    @Override
+    public Result build(BigInteger num) {
         String dec = addSpacesFromLow(num.toString(), 3);
 
         String hex = addSpacesFromLow(num.toString(16).toUpperCase(), 4);

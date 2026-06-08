@@ -1,7 +1,6 @@
 package com.mxster.everyphants.model.plugin.impl;
 
 import java.util.Date;
-import java.util.List;
 
 import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
@@ -15,17 +14,17 @@ public class TimePlugin extends ProactivePlugin {
     }
 
     @Override
-    protected List<Result> buildResult() {
+    public Result build() {
         if (cachedResult == null) {
             Date now = new Date();
             cachedResult = new RefreshableResult(
                     now.toString(), Long.toString(now.getTime()), 2)
-                    .withRefresh(0, () -> {
+                    .withRefresh(() -> {
                         Date n = new Date();
                         cachedResult.setTitle(n.toString());
                         cachedResult.setDisplayText(Long.toString(n.getTime()));
                     });
         }
-        return List.of(cachedResult);
+        return cachedResult;
     }
 }

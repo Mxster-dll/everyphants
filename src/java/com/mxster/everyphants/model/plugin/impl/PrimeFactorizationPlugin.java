@@ -18,8 +18,6 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
 
     public PrimeFactorizationPlugin() {
         super("质因数分解", "计算.png");
-
-        formatters.add(this::formatPrimeFactorization);
     }
 
     @Override
@@ -30,7 +28,8 @@ public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
                 : null;
     }
 
-    public Result formatPrimeFactorization(BigInteger num) {
+    @Override
+    public Result build(BigInteger num) {
         return cache.computeIfAbsent(num, key -> {
             LoadingResult result = new LoadingResult("计算中", key + " 正在分解", 1);
 

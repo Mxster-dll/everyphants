@@ -16,8 +16,6 @@ public class NumberToChinesePlugin extends ReactivePlugin<BigInteger> {
 
     public NumberToChinesePlugin() {
         super("数字大小写", "汉字.png");
-
-        formatters.add(this::toChinese);
     }
 
     @Override
@@ -28,7 +26,8 @@ public class NumberToChinesePlugin extends ReactivePlugin<BigInteger> {
                 : null;
     }
 
-    public Result toChinese(BigInteger num) {
+    @Override
+    public Result build(BigInteger num) {
         String lower = convert(num, DIGITS_LOWER, UNITS_LOWER, BIG_UNITS_LOWER);
         String upper = convert(num, DIGITS_UPPER, UNITS_UPPER, BIG_UNITS_UPPER);
         return new Result(lower, upper, 0.5);
