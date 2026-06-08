@@ -1,9 +1,9 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
 import java.math.BigInteger;
 
+import com.mxster.everyphants.model.ReactivePlugin;
 import com.mxster.everyphants.model.Result;
-import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class NumberToChinesePlugin extends ReactivePlugin<BigInteger> {
     private static final String[] DIGITS_UPPER = { "零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖" };

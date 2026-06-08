@@ -1,9 +1,9 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
 import java.math.BigInteger;
 
+import com.mxster.everyphants.model.ReactivePlugin;
 import com.mxster.everyphants.model.Result;
-import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class BaseConversionPlugin extends ReactivePlugin<BigInteger> {
     public BaseConversionPlugin() {

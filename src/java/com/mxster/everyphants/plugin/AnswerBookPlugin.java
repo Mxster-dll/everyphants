@@ -1,4 +1,4 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,8 +8,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
+import com.mxster.everyphants.model.ReactivePlugin;
 import com.mxster.everyphants.model.Result;
-import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class AnswerBookPlugin extends ReactivePlugin<String> {
     public AnswerBookPlugin() {

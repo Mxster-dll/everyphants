@@ -1,11 +1,11 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
 import java.math.BigInteger;
 import java.util.Random;
 
+import com.mxster.everyphants.model.ReactivePlugin;
 import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
-import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class RandomPlugin extends ReactivePlugin<BigInteger> {
     private static final Random RANDOM = new Random();

@@ -1,10 +1,10 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
 import java.util.Date;
 
+import com.mxster.everyphants.model.ProactivePlugin;
 import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
-import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
 
 public class TimePlugin extends ProactivePlugin {
     private RefreshableResult cachedResult;

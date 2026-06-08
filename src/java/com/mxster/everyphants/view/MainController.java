@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.mxster.everyphants.model.PluginManager;
+import com.mxster.everyphants.model.ProactivePlugin;
+import com.mxster.everyphants.model.ReactivePlugin;
 import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
-import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
-import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;

@@ -1,18 +1,12 @@
-package com.mxster.everyphants.model.plugin.core;
+package com.mxster.everyphants.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Platform;
 
-import com.mxster.everyphants.model.Result;
-
 public abstract class ReactivePlugin<T> extends Plugin {
     private final List<Runnable> resultChangedListeners = new ArrayList<>();
-
-    public ReactivePlugin(String name) {
-        super(name);
-    }
 
     public ReactivePlugin(String name, String iconPath) {
         super(name, iconPath);

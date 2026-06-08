@@ -1,4 +1,4 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,8 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.mxster.everyphants.model.LoadingResult;
+import com.mxster.everyphants.model.ReactivePlugin;
 import com.mxster.everyphants.model.Result;
-import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class TranslatePlugin extends ReactivePlugin<String> {
     private static final String APP_ID;

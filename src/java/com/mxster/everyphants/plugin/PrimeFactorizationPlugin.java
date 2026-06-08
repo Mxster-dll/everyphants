@@ -1,4 +1,4 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -8,8 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.LoadingResult;
+import com.mxster.everyphants.model.ReactivePlugin;
 import com.mxster.everyphants.model.Result;
-import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 public class PrimeFactorizationPlugin extends ReactivePlugin<BigInteger> {
     private static final BigInteger TWO = BigInteger.TWO;

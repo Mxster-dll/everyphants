@@ -1,4 +1,4 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;

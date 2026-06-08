@@ -1,4 +1,4 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -11,5 +11,4 @@ public class Base64EncodePlugin extends EncodePlugin {
         String encoded = Base64.getEncoder().encodeToString(s.getBytes(StandardCharsets.UTF_8));
         return new Result(encoded, "Base64编码", 0.1);
     }
-
 }

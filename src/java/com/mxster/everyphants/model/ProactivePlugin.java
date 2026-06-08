@@ -1,6 +1,4 @@
-package com.mxster.everyphants.model.plugin.core;
-
-import com.mxster.everyphants.model.Result;
+package com.mxster.everyphants.model;
 
 public abstract class ProactivePlugin extends Plugin {
     private Result cachedResult;

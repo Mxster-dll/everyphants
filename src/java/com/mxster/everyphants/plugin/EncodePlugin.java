@@ -1,6 +1,6 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
-import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
+import com.mxster.everyphants.model.ReactivePlugin;
 
 public abstract class EncodePlugin extends ReactivePlugin<String> {
     public EncodePlugin() {

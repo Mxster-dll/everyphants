@@ -1,7 +1,7 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
+import com.mxster.everyphants.model.ReactivePlugin;
 import com.mxster.everyphants.model.Result;
-import com.mxster.everyphants.model.plugin.core.ReactivePlugin;
 
 import javafx.scene.paint.Color;
 
@@ -37,8 +37,8 @@ public class ColorPlugin extends ReactivePlugin<Color> {
                 alpha, hex, red, green, blue, hue, saturation, brightness);
 
         Result result = new Result(title, displayText, 1);
-        // 卡片背景色 = 用户输入的颜色
-        result.setBackgroundColor(String.format("#%02X%02X%02X", red, green, blue));
+
+        result.setBackgroundColor(title);
         return result;
     }
 }

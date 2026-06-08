@@ -1,11 +1,11 @@
-package com.mxster.everyphants.model.plugin.impl;
+package com.mxster.everyphants.plugin;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import com.mxster.everyphants.model.ProactivePlugin;
 import com.mxster.everyphants.model.RefreshableResult;
 import com.mxster.everyphants.model.Result;
-import com.mxster.everyphants.model.plugin.core.ProactivePlugin;
 
 public class CountdownPlugin extends ProactivePlugin {
     private String eventName;
@@ -22,10 +22,10 @@ public class CountdownPlugin extends ProactivePlugin {
 
     @Override
     public Result build() {
-        RefreshableResult r = new RefreshableResult("", "", 1.8);
-        r.withRefresh(() -> refreshResult(r));
-        refreshResult(r);
-        return r;
+        RefreshableResult result = new RefreshableResult("", "", 1.8);
+        result.withRefresh(() -> refreshResult(result));
+        refreshResult(result);
+        return result;
     }
 
     private void refreshResult(RefreshableResult result) {
