@@ -38,8 +38,8 @@ public class PluginManager {
             new Base64DecodePlugin(),
             new Utf8DecodePlugin(),
             new AnswerBookPlugin(),
-            new CountdownPlugin("2026年高考", LocalDateTime.of(2026, 6, 7, 9, 0), "高考加油！"),
-            new CountdownPlugin("2026年CET4考试", LocalDateTime.of(2026, 6, 13, 9, 0), "高考加油！"),
+            new CountdownPlugin("2026年考研", LocalDateTime.of(2026, 12, 25, 9, 0), "必上岸！"),
+            new CountdownPlugin("2026年CET4考试", LocalDateTime.of(2026, 6, 13, 9, 0), "四级必过！"),
             new TimePlugin());
 
     public List<Plugin> getPlugins() {
